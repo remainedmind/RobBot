@@ -1,0 +1,30 @@
+{
+  "enru": {
+    "glossaryData": {
+      "glossaryPairs": [
+        {
+          "sourceText": "Telegram",
+          "translatedText": "Telegram"
+        },
+                {
+          "sourceText": "telegram",
+          "translatedText": "telegram"
+        },
+                {
+          "sourceText": "pandas",
+          "translatedText": "pandas"
+        },
+                {
+          "sourceText": "import",
+          "translatedText": "import"
+        }
+      ]
+    }
+  },
+  "ruen": {
+    "glossaryData": {
+      "glossaryPairs": [
+      ]
+    }
+  }
+}
