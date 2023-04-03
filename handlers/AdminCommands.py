@@ -72,7 +72,9 @@ async def cmd_start(message: Message, command: Command):
             answer = '\!\! User not found\.'
             markup = None
 
-    await message.answer(answer, parse_mode='MarkDownV2', reply_markup=markup)
+    await message.answer(answer,
+                         # parse_mode='MarkDownV2',
+                         reply_markup=markup)
 
 
 @router.callback_query(AdminCallbacks.filter())

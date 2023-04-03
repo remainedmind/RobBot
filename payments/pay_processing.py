@@ -3,22 +3,10 @@ import secrets
 from typing import List, Tuple
 from aiogram import Router, F, Bot
 # from aiogram.filters import or_f, in_
-from aiogram.types import Message, CallbackQuery, BotCommand, LabeledPrice, SuccessfulPayment, PreCheckoutQuery, successful_payment, ContentType
-from aiogram.filters import CommandStart, Command, Text, Filter, CommandObject
-from aiogram.methods.send_message import SendMessage
-from aiogram.fsm.context import FSMContext
-from aiogram.utils.deep_linking import decode_payload, create_deep_link, create_start_link, create_telegram_link
 
-from const import PROMOCODE
-from secret_data import TG_ADMIN_ID, TG_SUPPORT_ID
 router = Router()  # [1]
-from app.finite_state_machine import UserStates
-from keyboards import BasicKeyboards as bkb
-from keyboards import DynamicKeyboards as dkb
 
 
-from processing.SQL_processingg.SQL_high_level_processing import get_lang, get_info_by_nickname, get_user_info_quickly
-# from processing.casinoBackEnd import get_slot_machine_resul
 from text_data.message_answers import answers_texts as ma_texts
 from text_data import callback_answers
 from aiogram.utils.deep_linking import create_start_link, encode_payload

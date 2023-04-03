@@ -64,6 +64,7 @@ async def ask_gpt(data: list[dict], user_id: int =0, user_status: str = 'user', 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, json=body) as response:
                 answer = await response.json()
+                print(answer)
                 if response.status == 200:
                       # Получаем объект dict
                     coins = answer['usage']['total_tokens']

@@ -367,7 +367,7 @@ answers_texts = {
         #     'ru': "New message from Admin:\n{}"
         # },
         'message_from_user': (
-            "New feedback message from @{}\.\nID: `{}`\nStatus: *{}*\.\nBalance: *{}*\nReferrals: *{}*\."
+            "New feedback message from @{}.\nID: <code>{}</code>\nStatus: {}.\nBalance: {}\nReferrals: {}."
         ),
         'show_message_for_user': "<b>OK, send me the message to forward.</b>",
         'message_for_user': "<b>User will see the message:</b>",
@@ -399,21 +399,21 @@ answers_texts = {
     }
 }
 admin_command_answers = {
-    'info_about_user':  ("Human @{nickname}\.\nID: `{id}`\nStatus: *{status}*\;\n"
-                         "Balance: *{balance}*\;\n"
-                         "Referrals: *{referrals}*\;\n"
-                         "Referrer: *{referrer}*\;\n"
-                         "Language: *{language}*\;\n"
-                         "Premium until: *{prem_expires}*"),
+    'info_about_user':  ("Human @{nickname}.\nID: <code>{id}</code>\nStatus: {status};\n"
+                         "Balance: {balance};\n"
+                         "Referrals: {referrals};\n"
+                         "Referrer: {referrer};\n"
+                         "Language: {language};\n"
+                         "Premium until: {prem_expires}"),
     'payment_from':  (
         "NEW PAYMENT FROM @{nickname}\."
-        "\nID: `{id}`\nStatus: *{status}*\;\n"
-                         "Balance: *{balance}*\;\n"
-                         "Referrals: *{referrals}*\;\n"
-                         "Referrer: *{referrer}*\;\n"
-                         "Language: *{language}*\;\n"
-                         "Premium until: *{prem_expires}*\n"
-        "*PURCHASE: {payment}*"
+        "\nID: <code>{id}</code>\nStatus: <b>{status}</b>;\n"
+                         "Balance: {balance};\n"
+                         "Referrals: {referrals};\n"
+                         "Referrer: {referrer};\n"
+                         "Language: {language};\n"
+                         "Premium until: {prem_expires}\n"
+        "PURCHASE: {payment}"
     ),
     'amout_of_users': ('Total amount of users: <b>{}</b>'),
     'new_status': ("Client status was succesfully changed to: <b>{}</b>"),

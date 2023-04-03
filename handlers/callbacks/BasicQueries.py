@@ -6,9 +6,8 @@ from aiogram.types import Message, CallbackQuery, BotCommand, LabeledPrice, Succ
 from aiogram.filters import CommandStart, Command, Text, Filter, CommandObject
 from aiogram.methods.send_message import SendMessage
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.deep_linking import decode_payload, create_deep_link, create_start_link, create_telegram_link
+from aiogram.utils.deep_linking import create_start_link
 
-from const import PROMOCODE
 from secret_data import TG_ADMIN_ID, TG_SUPPORT_ID
 router = Router()  # [1]
 from app.finite_state_machine import UserStates
@@ -16,14 +15,13 @@ from keyboards import BasicKeyboards as bkb
 from keyboards import DynamicKeyboards as dkb
 from keyboards.CommunicationWithAdmin import FeedbackCallback
 
-from keyboards import CasinoGame
-# from textdata import properties, callback_answers, message_texts
+
 from processing.SQL_processingg.SQL_high_level_processing import get_lang, get_info_by_nickname, get_user_info_quickly
 from processing.AccountProcessing import get_account_details
 # from processing.casinoBackEnd import get_slot_machine_resul
 
 from text_data.message_answers import answers_texts as ma_texts
-from text_data.various import expiry_format
+
 from text_data import callback_answers
 from payments.pay_text_data import main_market_description
 from payments.pay_keyboards import market_kb, first_market_opening_kb
@@ -142,7 +140,7 @@ async def confirm_feedback(
             text = ma_texts['feedback']['message_from_user'].format(
                 username, id, status, balance, referrals
             ),
-            parse_mode='MarkdownV2'
+            # parse_mode='MarkdownV2'
         )
         await callback.message.forward(chat_id=TG_SUPPORT_ID,)
         await callback.message.delete_reply_markup()

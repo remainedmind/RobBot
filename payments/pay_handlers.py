@@ -371,7 +371,9 @@ async def photo_msg(message: Message, state: FSMContext):
         'payment_from'
     ].format(**db_info)
 
-    await SendPhoto(chat_id=TG_SUPPORT_ID, photo=message.photo[0].file_id, caption=payment_message, parse_mode='MarkdownV2', reply_markup=keyboard)
+    await SendPhoto(chat_id=TG_SUPPORT_ID, photo=message.photo[0].file_id, caption=payment_message,
+                    # parse_mode='MarkdownV2',
+                    reply_markup=keyboard)
 
     # await SendMessage(chat_id=TG_SUPPORT_ID, text=payment_message, parse_mode='MarkdownV2', reply_markup=keyboard)
     await state.set_state(UserStates.main)

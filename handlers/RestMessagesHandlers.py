@@ -6,7 +6,6 @@ from app.finite_state_machine import UserStates
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command, Text, Filter
 from text_data.message_answers import answers_texts as ma_texts
-from const import PROMOCODE
 router = Router()  # [1]
 
 
