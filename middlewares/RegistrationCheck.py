@@ -61,7 +61,15 @@ class AccessCheckMiddleware(BaseMiddleware):
                 except KeyError:
                     # in case we send voice message, we don't have command field
                     lang = event.from_user.language_code
-                    await event.answer(ma_texts['start']['new_user'][lang].format(
+                    try:
+                        _  = event.message_id
+                        send = event.answer
+                    except AttributeError:
+                        _ = event.id  # Check for attribute existing
+                        send = event.message.answer
+
+
+                    await send(ma_texts['start']['new_user'][lang].format(
                         event.from_user.first_name
                     )
                     )

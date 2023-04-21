@@ -1,14 +1,9 @@
 import asyncio
 
 from aiogram import Router, F, Bot
-from aiogram.types import Message, CallbackQuery, BotCommand, LabeledPrice, SuccessfulPayment
-from aiogram.filters import CommandStart, Command, Text, Filter, CommandObject
-from aiogram.methods.send_message import SendMessage
+from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.deep_linking import decode_payload, create_deep_link, create_start_link, create_telegram_link
 
-from const import PROMOCODE
-from secret_data import TG_ADMIN_ID
 router = Router()  # [1]
 
 from keyboards import CasinoGame

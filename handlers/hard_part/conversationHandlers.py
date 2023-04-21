@@ -1,23 +1,16 @@
 """
 
 """
-from typing import Optional
-from collections import  OrderedDict
+
 from aiogram import Bot, Router, F, exceptions
 from aiogram.dispatcher.event.handler import HandlerObject
-from aiogram.dispatcher.flags import get_flag
+
 
 from aiogram.types import Message, CallbackQuery, InputMediaPhoto
-from aiogram.filters import Command, Text, Filter, or_f
-import asyncio
-# from aiogram.dispatcher.flags import Flag, check_flags
-# import itertools
-# from aiogram.methods.send_message import SendMessage
-# from secrets import TG_ADMIN_ID
-  # [1]
-# from textdata import various_data, message_texts
+from aiogram.filters import Command, Text, Filter, or_f, invert_f
+
 from keyboards import BasicKeyboards as bkb
-from keyboards import ConversationContextKeyboard as concon
+
 import re
 
 from aiogram.fsm.context import FSMContext
@@ -34,17 +27,20 @@ from handlers.hard_part.conversationHelpers import process_question, send_answer
 from app.finite_state_machine import UserStates
 from processing.SQL_processingg import SQL_high_level_processing as sql_high_p
 from payments.pay_keyboards import buy_sub_kb
+
+
 router = Router()
 router.message.middleware(BalanceCheckMiddleware())
 router.callback_query.middleware(BalanceCheckMiddleware())
 
 router.message.middleware(ThrottlingMiddleware())
 router.callback_query.middleware(ThrottlingMiddleware())
+router.message.filter(invert_f(UserStates.need_to_unblock_bot))
 
 
 
 
-@router.message(UserStates.main, Command(commands=["ask"]), flags={"throttling": 20, 'coins_minimum': 0})
+@router.message(Command(commands=["ask"]), flags={"throttling": 20, 'coins_minimum': 0})
 async def command_start_handler(message: Message, state: FSMContext, command: Command) -> None:
     user_id = message.from_user.id
     param = command.args
@@ -67,7 +63,7 @@ async def command_start_handler(message: Message, state: FSMContext, command: Co
         await message.reply(ma_texts['answering']['empty command'][lang])
 
 
-@router.message(UserStates.main, Command(commands=["image"]), flags={"throttling": 20, 'coins_minimum': 600})
+@router.message(Command(commands=["image"]), flags={"throttling": 20, 'coins_minimum': 600})
 async def draw(message: Message, command: Command, state: FSMContext, handler: HandlerObject) -> None:
     param = command.args
     user_id = message.from_user.id
@@ -84,7 +80,7 @@ async def draw(message: Message, command: Command, state: FSMContext, handler: H
         await message.reply(ma_texts['answering']['photo'][lang][0], reply_markup=bkb.cancel_kb[lang])
 
 
-@router.message(UserStates.main, Text(startswith=words_to_image, ignore_case=True), F.text.as_("text"),  flags={"throttling": 20, 'coins_minimum': 600})
+@router.message(Text(startswith=words_to_image, ignore_case=True), F.text.as_("text"),  flags={"throttling": 20, 'coins_minimum': 600})
 async def draw(message: Message, text, state: FSMContext) -> None:
     user_id = message.from_user.id
     user_info = await state.get_data()
@@ -113,7 +109,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
 
 
 # @router.message(UserStates.main, F.text,  flags={"throttling": 20})
-@router.message(UserStates.main, F.text,  flags={"throttling": 20, 'coins_minimum': 0})
+@router.message(F.text,  flags={"throttling": 20, 'coins_minimum': 0})
 async def command_start_handler(message: Message, state: FSMContext) -> None:
     """
 
@@ -138,7 +134,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     await sql_high_p.change_coins_balance(user_id, coins)
 
 
-@router.message(UserStates.main, F.voice,  flags={"throttling": 20, 'coins_minimum': 0})
+@router.message(F.voice,  flags={"throttling": 20, 'coins_minimum': 0})
 async def voice_message_handler(message: Message, bot: Bot, state: FSMContext) -> None:
     """
     Function for handling voice messages for further recognition.

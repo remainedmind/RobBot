@@ -4,12 +4,15 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.dispatcher.event.event import EventObserver
-# from aiogram.fsm.storage.redis import RedisStorage, Redis
+from aiogram.filters import invert_f
+from aiogram.fsm.storage.redis import RedisStorage
 from secret_data import TG_TOKEN, TG_ADMIN_ID
 from handlers import AdminCommands, BasicPublicCommands, RestMessagesHandlers, BotBlockingHandler
 from payments.pay_handlers import router as pay_router
 from handlers.callbacks import BasicQueries, CasinoQueries, SettingsQueries
 from handlers.hard_part import conversationHandlers, conversationCallbacks
+
+from app.finite_state_machine import UserStates
 
 import os
 
@@ -24,17 +27,21 @@ from app.set_menu_commands import set_default_command_menu
 from app.coins_updating import behind_loop
 from processing.SQL_processingg.SQL_low_level_processing import shutdown_connection
 
+# def shutdown_redis()
 
 async def main() -> None:
     # redis_con = Redis(host="127.0.0.1", port=6379)
     # storage = RedisStorage(redis_con)
+    redistorage = RedisStorage.from_url('redis://localhost:6379/0')
 
-    # Dispatcher is a root router
-    dp = Dispatcher()
 
-    # When shutdown, we close SQL connections
+    dp = Dispatcher(storage=redistorage)
+    # dp = Dispatcher()
+
+    # When shutdown, we close SQL and Redis connections
     observer = EventObserver()
     observer.register(shutdown_connection)
+    observer.register(redistorage.close)
 
     dp.include_routers(
         BotBlockingHandler.router,

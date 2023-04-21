@@ -25,8 +25,8 @@ answers_texts = {
             'ru': "Пожалуйста, запустите Бота в <b>личном чате</b>."
             },
         'restart': {
-            'en': "Please start the Bot by clicking <b>/start</b>.",
-            'ru': "Пожалуйста, запустите Бота, нажав в <b>/start</b>."
+            'en': "Please start the Bot by clicking <b>/start</b> and the button.",
+            'ru': "Пожалуйста, запустите Бота, нажав в <b>/start</b> и кнопку запуска."
         },
         'private': {
             'en': ("I'm smart chat bot based on GPT. I can "

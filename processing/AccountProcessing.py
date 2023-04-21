@@ -1,19 +1,8 @@
-from datetime import datetime
-
-import aiogram.exceptions
-
-from const import PROMOCODE
-from secret_data import TG_ADMIN_ID
-
-from keyboards import BasicKeyboards as bkb
-
 from processing.SQL_processingg import SQL_high_level_processing as sql_high_p
 from processing import timeProcessing as timep
 
 from text_data.message_answers import answers_texts as ma_texts
 from text_data.various import expiry_format
-
-from aiogram import types, Bot
 
 async def get_date_of_coins_updating(lang, expiry: str) -> str:
 

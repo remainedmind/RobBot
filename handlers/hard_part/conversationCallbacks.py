@@ -1,40 +1,23 @@
 """
 
 """
-from typing import Optional
+
 from aiogram import Bot, Router, F, exceptions
 
 from aiogram.types import Message, CallbackQuery, InputMediaPhoto
-from aiogram.filters import Command, Text, Filter, or_f
-import asyncio
-from aiogram.dispatcher.flags import Flag, check_flags
-import itertools
-from aiogram.methods.send_message import SendMessage
-from secret_data import TG_ADMIN_ID
-router = Router()  # [1]
+from aiogram.filters import Command, Text, Filter, or_f, invert_f
 
-from keyboards import BasicKeyboards as bkb
+  # [1]
+
+
 from keyboards import ConversationContextKeyboard as conconkb
-import re
-
-from processing import ServerSideProcessing as ssp
-from processing.split_long_message import safe_split_text
-from processing.ServerSideProcessing.textGeneration import get_text
-from processing.ServerSideProcessing.photoGeneration import get_photo
-from processing.ServerSideProcessing.voiceTranscription import transcribe
-
-
-
-from const import VOICE_TRANSCRIBE_PRICE, PHOTO_GENERATION_PRICE
 
 from aiogram.fsm.context import FSMContext
 
 # from aiogram.dispatcher.filters.state import State, StatesGroup
 
 
-from middlewares.throttling import ThrottlingMiddleware
 from middlewares.BalanceCheck import BalanceCheckMiddleware
-from processing.LongAnswerEscort import escort
 from text_data.message_answers import answers_texts as ma_texts
 from text_data import callback_answers
 
@@ -42,10 +25,12 @@ from text_data import callback_answers
 from processing.SQL_processingg import SQL_high_level_processing as sql_high_p
 from handlers.hard_part.conversationHelpers import process_question, send_answer
 from payments.pay_keyboards import buy_sub_kb
+from app.finite_state_machine import UserStates
 
-# router.message.middleware(BalanceCheckMiddleware())
+
+router = Router()
 router.callback_query.middleware(BalanceCheckMiddleware())
-
+router.callback_query.filter(invert_f(UserStates.need_to_unblock_bot))
 
 @router.callback_query(conconkb.ConversationCallback.filter(F.data == 'dialogue'))
 async def callbacks_num_change_fab(

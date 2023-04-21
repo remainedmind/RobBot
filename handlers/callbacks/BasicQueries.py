@@ -34,6 +34,12 @@ async def callbacks_num_change_fab(
 ):
     # lang = await sqlp.get_lang(id)
     lang = (await state.get_data())['language']
+    # user_id = callback.from_user.id
+    # chat_id = callback.message.chat.id
+    # await set_personal_menu_commands(
+    #     chat_id=chat_id, user_id=user_id, lang=lang, bot=bot
+    # )
+
     # await callback.message.delete()
     # await callback.message.answer('MAIN PAGE', reply_markup=bkb.main_page_kb[lang])
     await callback.message.edit_text(ma_texts['main'][lang], reply_markup=bkb.main_page_kb[lang])
@@ -194,7 +200,7 @@ async def callbacks_num_change_fab(
         lang=lang, link=ma_texts['referral']['referral_text'][lang].format(link)))
 
 
-@router.callback_query(F.data == 'ready')
+# @router.callback_query(F.data == 'ready')
 @router.callback_query(F.data.in_({'ready', }), UserStates.need_to_unblock_bot)
 async def callbacks_num_change_fab(
         callback: CallbackQuery, bot: Bot,
@@ -203,6 +209,11 @@ async def callbacks_num_change_fab(
     user_id = callback.from_user.id
     chat_id = callback.message.chat.id
     lang = (await state.get_data())['language']
+    # user_id = callback.from_user.id
+    # chat_id = callback.message.chat.id
+    # await set_personal_menu_commands(
+    #     chat_id=chat_id, user_id=user_id, lang=lang, bot=bot
+    # )
     # await state.update_data(language=lang)
     await callback.answer(callback_answers.language_set[lang])
     if chat_id == user_id:
@@ -228,33 +239,33 @@ async def callbacks_num_change_fab(
 
 
 
-@router.callback_query(F.data.in_({'en', 'ru'}), UserStates.main)
-async def callbacks_num_change_fab(
-        callback: CallbackQuery, bot: Bot,
-        state: FSMContext
-):
-    user_id = callback.from_user.id
-    chat_id = callback.message.chat.id
-    print(user_id, chat_id)
-    lang = callback.data
-    await state.update_data(language=lang)
-    await callback.answer(callback_answers.language_set[lang])
-    if chat_id == user_id:
-        await callback.message.edit_text(
-            ma_texts['start']['private'][lang]
-        )
-        # await sql_high_p.add_new_user(user_id, username, lang, now)
-    else:
-        try:
-            await SendMessage(
-                chat_id=user_id,
-                text=ma_texts['start']['private'][lang]
-            )
-            await callback.message.edit_text(
-                ma_texts['start']['group'][lang]
-            )
-        except exceptions.TelegramForbiddenError:  # Bot Blocked
-            await callback.message.edit_text(
-                ma_texts['start']['failed'][lang]
-            )
-            # await state.clear()
+# @router.callback_query(F.data.in_({'en', 'ru'}), UserStates.main)
+# async def callbacks_num_change_fab(
+#         callback: CallbackQuery, bot: Bot,
+#         state: FSMContext
+# ):
+#     user_id = callback.from_user.id
+#     chat_id = callback.message.chat.id
+#     print(user_id, chat_id)
+#     lang = callback.data
+#     await state.update_data(language=lang)
+#     await callback.answer(callback_answers.language_set[lang])
+#     if chat_id == user_id:
+#         await callback.message.edit_text(
+#             ma_texts['start']['private'][lang]
+#         )
+#         # await sql_high_p.add_new_user(user_id, username, lang, now)
+#     else:
+#         try:
+#             await SendMessage(
+#                 chat_id=user_id,
+#                 text=ma_texts['start']['private'][lang]
+#             )
+#             await callback.message.edit_text(
+#                 ma_texts['start']['group'][lang]
+#             )
+#         except exceptions.TelegramForbiddenError:  # Bot Blocked
+#             await callback.message.edit_text(
+#                 ma_texts['start']['failed'][lang]
+#             )
+#             # await state.clear()

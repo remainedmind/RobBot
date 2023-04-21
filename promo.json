@@ -1,5 +1,1 @@
-{
-  "!MyPromoExample": {
-    "usage_limit": 9, "bonus": 7777, "used_by": [111111111]
-  }
-}
+{"!R1Bot": {"usage_limit": 8, "bonus": 7777, "used_by": [415518892, 779123467]}, "!RBupdate": {"usage_limit": 0, "bonus": 10000, "used_by": [772051811, 335345002, 797896083, 406570178, 811794401]}, "!DG20": {"usage_limit": 19, "bonus": 10000, "used_by": [1011807542, 772051811, 367961348, 495118183, 877860676, 1122033747]}, "!iLoveROB": {"usage_limit": 100, "bonus": 10000, "used_by": []}, "!RobotFriend": {"usage_limit": 99, "bonus": 30000, "used_by": [406570178]}, "!VIPaRBuser": {"usage_limit": 100, "bonus": 100000, "used_by": []}}
