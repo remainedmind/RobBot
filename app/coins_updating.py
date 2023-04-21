@@ -14,11 +14,11 @@ async def behind_loop(bot: Bot):
     """
     Constant updating of coins and user status
     """
-    black_list = await bot.send_message(
-        chat_id=TG_SUPPORT_ID,
-        text='BLACK LIST:'
-    )
-    bad_users = set()
+    # black_list = await bot.send_message(
+    #     chat_id=TG_SUPPORT_ID,
+    #     text='BLACK LIST:'
+    # )
+    # bad_users = set()
     # Here we create individual connection
     async with aiosqlite.connect(DATABASE) as con:
 
@@ -101,19 +101,23 @@ async def behind_loop(bot: Bot):
                                 markup = subscribe_to_ru_channel_kb
                         try:
                             # Если баланс изменился - отправляем уведомление
+
                             await bot.send_message(
                                 chat_id=client_id, text=answer_text, reply_markup=markup)
                         except exceptions.TelegramForbiddenError:  # Бот в чс
-                            bad_users.add((client_id, name))
-                            bad_list = ''
-                            [bad_list := bad_list+f'\n<code>{user[0]}</code>, @{user[1]}' for user in bad_users]
-
-                            try:
-                                await bot.edit_message_text('<b>BLACK LIST:</b>\n' + bad_list,
-                                                            black_list.chat.id,
-                                                            black_list.message_id)
-                            except exceptions.TelegramBadRequest:
-                                pass
+                            pass
+                            # bad_users.add((client_id, name))
+                            # bad_list = ''
+                            # [bad_list := bad_list+f'\n<code>{user[0]}</code>, @{user[1]}' for user in bad_users]
+                            #
+                            # try:
+                            #     await bot.edit_message_text('<b>BLACK LIST:</b>\n' + bad_list,
+                            #                                 black_list.chat.id,
+                        #                                     black_list.message_id)
+                        #     except exceptions.TelegramBadRequest:
+                        #         pass
+                        # except exceptions.TelegramBadRequest:
+                        #     print('HERE')
                 # Now chech user status
                 if not prem_expires:
                     # No premium

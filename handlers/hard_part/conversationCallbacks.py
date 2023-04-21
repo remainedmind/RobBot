@@ -1,7 +1,7 @@
 """
 
 """
-
+import json, pickle
 from aiogram import Bot, Router, F, exceptions
 
 from aiogram.types import Message, CallbackQuery, InputMediaPhoto
@@ -42,8 +42,12 @@ async def callbacks_num_change_fab(
 
     try:
         dialogue = (await state.get_data())['dialogue']
+        dialogue: conconkb.Chat = pickle.loads(bytes.fromhex(dialogue))
+
     except KeyError:
+
         dialogue = conconkb.Chat()
+
     action = callback_data.action
     if action == 'start':
         question = callback.message.reply_to_message.text
@@ -56,7 +60,10 @@ async def callbacks_num_change_fab(
     elif action == 'stop':
         await dialogue.stop_chat()
 
+    # Transform Object instance to string to make it storable
+    dialogue = pickle.dumps(dialogue).hex()
     await state.update_data(dialogue=dialogue)
+
     await callback.message.edit_reply_markup()
     await callback.answer(callback_answers.conversation[action][lang])
     await callback.message.reply(ma_texts['conversation'][action][lang])
@@ -82,6 +89,7 @@ async def callbacks_num_change_fab(
             user_info = await state.get_data()
             dialogue, coins, removed_old = await process_question(user_id=user_id, message=callback.message, user_info=user_info, text=question)
             if dialogue:
+                dialogue = pickle.dumps(dialogue).hex()
                 await state.update_data(dialogue=dialogue)
             await sql_high_p.change_coins_balance(user_id, coins)
             await state.update_data(voice_text=None)  # Clear

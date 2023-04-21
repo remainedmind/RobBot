@@ -7,7 +7,42 @@ from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
+# async def Chat() -> dict:
+#     dialogue = {}
+#     dialogue['chat'] = []
+#     dialogue['active'] = False
+#     return dialogue
+#
+#
+# async def start_chat(dialogue):
+#     dialogue['chat'] = []
+#     dialogue['active'] = True
+#     return dialogue
+#
+# async def add_user_message(dialogue, text):
+#     dialogue['chat'].append({"role": "user", "content": text})
+#     return dialogue
+#
+# async def add_bot_message(dialogue, text):
+#     dialogue['chat'].append({"role": "assistant", "content": text})
+#     return dialogue
+#
+# async def reset_chat(dialogue):
+#     dialogue['chat'].clear()
+#     return dialogue
+#
+# async def stop_chat(dialogue):
+#     dialogue['chat'].clear()
+#     dialogue['active'] = False
+#     return dialogue
+#
+# async def remove_old_messages(dialogue):
+#     # Delete last messages because of dialogue is exceeding GPT limit
+#     dialogue['chat'].pop(0)
+#
+#
 
+#
 class Chat():
     """
     Класс, предназначенный для ведения диалога с GPT-моделью.
@@ -18,6 +53,7 @@ class Chat():
         self.active = False  # Будем ли мы запоминать контекст
 
     async def start_chat(self):
+        print('Начали чат')
         self.chat.clear()
         self.active = True
 

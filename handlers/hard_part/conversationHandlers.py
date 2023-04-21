@@ -1,7 +1,7 @@
 """
 
 """
-
+import json, pickle
 from aiogram import Bot, Router, F, exceptions
 from aiogram.dispatcher.event.handler import HandlerObject
 
@@ -51,6 +51,8 @@ async def command_start_handler(message: Message, state: FSMContext, command: Co
         # response = (await asyncio.gather(process_question(message=message, state=state, text=param), escort(message=message, lang=lang, target='text')))
         dialogue, coins, removed_old = await process_question(user_id=user_id, message=message, user_info=user_info, text=param)
         if dialogue:
+            dialogue = pickle.dumps(dialogue).hex()
+            # dialogue = pickle.loads(bytes.fromhex(dialogue))
             await state.update_data(dialogue=dialogue)
         if removed_old:
             await message.answer(ma_texts['answering']['dialogue_limit'][lang],
@@ -68,8 +70,6 @@ async def draw(message: Message, command: Command, state: FSMContext, handler: H
     param = command.args
     user_id = message.from_user.id
     user_info = await state.get_data()
-    print(user_info)
-    # print(await get_flag(handler, 'throttling'))
     if param:
         coins = await process_drawing(user_id, message, param, user_info)
         await sql_high_p.change_coins_balance(user_id, coins)
@@ -123,6 +123,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     await state.set_state(UserStates.main)
     dialogue, coins, removed_old = await process_question(user_id, message, user_info)
     if dialogue:
+        dialogue = pickle.dumps(dialogue).hex()
         await state.update_data(dialogue=dialogue)
     if removed_old:
         status = await sql_high_p.check_for_premium(user_id)

@@ -1,6 +1,10 @@
 from aiogram import html, md
 
 answers_texts = {
+    'switch': {
+        'en': "Your command menu was changed to the new version.",
+        'ru': "Ваше меню изменено. Теперь там только актуальные команды."
+    },
     'start': {
         'new_user': {
             'en': "Hello, <b>{}</b>!\nPlease click <b><i>/start</i></b> to run the Bot. ",

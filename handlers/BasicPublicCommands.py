@@ -4,7 +4,7 @@
 from datetime import datetime
 
 import aiogram.exceptions
-from aiogram import Router, F, md, html
+from aiogram import Router, F, md, html, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart, Command, Text, Filter, CommandObject, invert_f, or_f, and_f
@@ -14,7 +14,7 @@ from aiogram.methods.send_message import SendMessage
 # from secret_data import TG_ADMIN_ID
 from text_data.user_settings import PROPERTIES_DEFAULT_VALUES
 
-router = Router()  # [1]
+
 from keyboards import BasicKeyboards as bkb
 
 from processing.SQL_processingg import SQL_high_level_processing as sql_high_p
@@ -29,6 +29,9 @@ from keyboards.CommunicationWithAdmin import confirm_feedback_kb
 from processing.AccountProcessing import get_account_details
 from processing.LightFucntions import get_emoji
 
+from app.set_menu_commands import set_personal_menu_commands
+
+router = Router()
 
 @router.message(CommandStart())
 async def command_start_handler(message: Message, command: CommandObject, state: FSMContext) -> None:
@@ -84,6 +87,20 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     await state.set_state(UserStates.main)
     await message.answer(ma_texts['main'][lang], reply_markup=bkb.main_page_kb[lang])
 
+
+
+@router.message(Command(commands=["switch"]))
+async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -> None:
+    """
+    It's an old command. When recieved, user's menu will be changed to new format
+    """
+    lang = (await state.get_data())['language']
+    user_id, chat_id = message.from_user.id, message.chat.id
+
+    await set_personal_menu_commands(
+        chat_id=chat_id, user_id=user_id, lang=lang, bot=bot
+    )
+    await message.answer(ma_texts['switch'][lang])
 
 
 @router.message(Command(commands=["help"]))

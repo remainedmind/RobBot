@@ -14,6 +14,7 @@ from app.finite_state_machine import UserStates
 from keyboards import BasicKeyboards as bkb
 from keyboards import DynamicKeyboards as dkb
 from keyboards.CommunicationWithAdmin import FeedbackCallback
+from app.set_menu_commands import set_personal_menu_commands
 
 
 from processing.SQL_processingg.SQL_high_level_processing import get_lang, get_info_by_nickname, get_user_info_quickly
@@ -236,6 +237,9 @@ async def callbacks_num_change_fab(
             )
             return
     await state.set_state(UserStates.main)
+    await set_personal_menu_commands(
+        chat_id=chat_id, user_id=user_id, lang=lang, bot=bot
+    )
 
 
 

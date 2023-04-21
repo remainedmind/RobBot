@@ -1,7 +1,7 @@
 """
 
 """
-
+import json, pickle
 from typing import Optional, Tuple
 from aiogram import Bot, Router, F, exceptions
 
@@ -16,6 +16,7 @@ from processing.split_long_message import safe_split_text
 from processing.ServerSideProcessing.textGeneration import get_text
 from processing.ServerSideProcessing.photoGeneration import get_photo
 from keyboards.ConversationContextKeyboard import Chat
+# from keyboards.ConversationContextKeyboard import start_chat, stop_chat, add_bot_message, add_user_message, reset_chat, remove_old_messages
 
 
 from processing.ServerSideProcessing.voiceTranscription import transcribe
@@ -89,40 +90,45 @@ async def process_question(user_id: int, message: Message, user_info: dict, text
     except KeyError:
         temperature = PROPERTIES_DEFAULT_VALUES['temperature']
     temperature /= 10
-
     try:
-        dialogue: Chat = user_info['dialogue']
+
+        dialogue: str = user_info['dialogue']
+        # Transform string to Class instance to string:
+        dialogue = pickle.loads(bytes.fromhex(dialogue))
+
         is_chat = dialogue.active
+
     except KeyError:
         is_chat = False
         dialogue = None
 
     if not text:
         text = message.text
+
     if is_chat:
         tokens_limit = MAX_DIALOGUE_SIZE[user_status]
-        await dialogue.add_user_message(text)
-        # total_letters = sum([len(m['content']) for m in dialogue.chat])
-        # print("TOTAL, ", total_letters)
-        # if total_letters > MAX_DIALOGUE_LENGTH[user_status]:
-        #     await dialogue.remove_old_messages()
-        #     # We'll say to user that old messages was deleted
-        #     removed_old = True
 
+        await dialogue.add_user_message(text)
+        # await add_user_message(dialogue, text)
 
         response, ans_message = await asyncio.gather(
-            get_text(data=dialogue.chat,
-                     user_id=user_id,
-                     user_status=user_status,
-                     temperature=temperature),
+            get_text(
+                data=dialogue.chat,
+                # data=dialogue['chat'],
+                user_id=user_id,
+                user_status=user_status,
+                temperature=temperature),
             escort(user_status=user_status, message=message, lang=lang, target='text')
         )
         ans_text, coins = response[0], response[1]
 
         await dialogue.add_bot_message(ans_text)
+        # await add_bot_message(dialogue, ans_text)
         if coins > tokens_limit:
             # Delete it again
+            # await remove_old_messages(dialogue)
             await dialogue.remove_old_messages()
+
             removed_old = True
         elif ans_text == 'length_error':
             await dialogue.remove_old_messages()
