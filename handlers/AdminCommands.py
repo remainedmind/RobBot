@@ -116,7 +116,7 @@ async def confirm_feedback(
             user_lang = client[6]  # language
             if user_lang == data or data == 'all':  # Audience
                 try:
-                    await SendMessage(chat_id=user_to_sent, text=callback.message.text)
+                    await SendMessage(chat_id=user_to_sent, text=callback.message.html_text, parse_mode='HTML')
                 except exceptions.TelegramForbiddenError:
                     await black_list.edit_text(
                         black_list.text + f"\n<code>{user_to_sent}</code>;"
@@ -172,7 +172,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     """
     text = message.text
     await message.reply(ma_texts['feedback']['message_for_user'])
-    await message.answer(text=text, reply_markup=confirm_answer_kb, parse_mode=None)
+    await message.answer(text=text, reply_markup=confirm_answer_kb, parse_mode='HTML')
 
 
 @router.message(F.text, UserStates.coins_giving)

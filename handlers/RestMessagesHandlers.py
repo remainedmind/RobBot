@@ -58,4 +58,4 @@ async def command_start_handler(message: Message) -> None:
 @router.message(F.photo)
 async def photo_msg(message: Message, state: FSMContext):
     print(await state.get_state())
-    await message.answer("Это точно какое-то изображение!")
+    await message.answer("I cannot work with images yet :(")

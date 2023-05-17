@@ -30,18 +30,18 @@ from processing.SQL_processingg.SQL_low_level_processing import shutdown_connect
 # def shutdown_redis()
 
 async def main() -> None:
-    # redis_con = Redis(host="127.0.0.1", port=6379)
-    # storage = RedisStorage(redis_con)
-    redistorage = RedisStorage.from_url('redis://localhost:6379/0')
 
 
-    dp = Dispatcher(storage=redistorage)
-    # dp = Dispatcher()
+    # redistorage = RedisStorage.from_url('redis://localhost:6379/0')
+
+
+    # dp = Dispatcher(storage=redistorage)
+    dp = Dispatcher()
 
     # When shutdown, we close SQL and Redis connections
     observer = EventObserver()
     observer.register(shutdown_connection)
-    observer.register(redistorage.close)
+    # observer.register(redistorage.close)
 
     dp.include_routers(
         BotBlockingHandler.router,

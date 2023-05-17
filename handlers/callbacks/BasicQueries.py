@@ -240,36 +240,3 @@ async def callbacks_num_change_fab(
     await set_personal_menu_commands(
         chat_id=chat_id, user_id=user_id, lang=lang, bot=bot
     )
-
-
-
-# @router.callback_query(F.data.in_({'en', 'ru'}), UserStates.main)
-# async def callbacks_num_change_fab(
-#         callback: CallbackQuery, bot: Bot,
-#         state: FSMContext
-# ):
-#     user_id = callback.from_user.id
-#     chat_id = callback.message.chat.id
-#     print(user_id, chat_id)
-#     lang = callback.data
-#     await state.update_data(language=lang)
-#     await callback.answer(callback_answers.language_set[lang])
-#     if chat_id == user_id:
-#         await callback.message.edit_text(
-#             ma_texts['start']['private'][lang]
-#         )
-#         # await sql_high_p.add_new_user(user_id, username, lang, now)
-#     else:
-#         try:
-#             await SendMessage(
-#                 chat_id=user_id,
-#                 text=ma_texts['start']['private'][lang]
-#             )
-#             await callback.message.edit_text(
-#                 ma_texts['start']['group'][lang]
-#             )
-#         except exceptions.TelegramForbiddenError:  # Bot Blocked
-#             await callback.message.edit_text(
-#                 ma_texts['start']['failed'][lang]
-#             )
-#             # await state.clear()

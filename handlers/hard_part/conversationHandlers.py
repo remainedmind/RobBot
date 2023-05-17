@@ -4,7 +4,7 @@
 import json, pickle
 from aiogram import Bot, Router, F, exceptions
 from aiogram.dispatcher.event.handler import HandlerObject
-
+from aiogram.utils.chat_action import ChatActionSender
 
 from aiogram.types import Message, CallbackQuery, InputMediaPhoto
 from aiogram.filters import Command, Text, Filter, or_f, invert_f
@@ -110,7 +110,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
 
 # @router.message(UserStates.main, F.text,  flags={"throttling": 20})
 @router.message(F.text,  flags={"throttling": 20, 'coins_minimum': 0})
-async def command_start_handler(message: Message, state: FSMContext) -> None:
+async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -> None:
     """
 
     :param message:
@@ -121,6 +121,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     user_info = await state.get_data()
     lang = user_info['language']
     await state.set_state(UserStates.main)
+
     dialogue, coins, removed_old = await process_question(user_id, message, user_info)
     if dialogue:
         dialogue = pickle.dumps(dialogue).hex()

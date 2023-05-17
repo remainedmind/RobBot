@@ -92,7 +92,7 @@ async def process_question(user_id: int, message: Message, user_info: dict, text
     temperature /= 10
     try:
 
-        dialogue: str = user_info['dialogue']
+        dialogue: Chat = user_info['dialogue']
         # Transform string to Class instance to string:
         dialogue = pickle.loads(bytes.fromhex(dialogue))
 
