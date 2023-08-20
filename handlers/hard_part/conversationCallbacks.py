@@ -5,7 +5,7 @@ import json, pickle
 from aiogram import Bot, Router, F, exceptions
 
 from aiogram.types import Message, CallbackQuery, InputMediaPhoto
-from aiogram.filters import Command, Text, Filter, or_f, invert_f
+from aiogram.filters import Command, Filter, or_f, invert_f
 
   # [1]
 

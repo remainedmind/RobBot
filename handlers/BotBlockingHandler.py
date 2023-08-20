@@ -23,10 +23,8 @@ async def user_blocked_bot(event: ChatMemberUpdated):
     user_nickname = event.from_user.username
     await SendMessage(
         chat_id=TG_SUPPORT_ID,
-        text=f'❗️Внимание\! Этот кожаный мешок с костями заблокировал бота:\n'
-             f'@{user_nickname}\;\nID: `{user_id}`',
-        parse_mode='MarkdownV2'
-    )
+        text=f'❗️Внимание! Этот кожаный мешок с костями заблокировал бота:\n'
+             f'@{user_nickname};\nID: <code>{user_id}</code>',    )
 
 
 @router.my_chat_member(
@@ -37,7 +35,6 @@ async def user_unblocked_bot(event: ChatMemberUpdated):
     user_nickname = event.from_user.username
     await SendMessage(
         chat_id=TG_SUPPORT_ID,
-        text=f'❗️Внимание\! Этот кусок мяса переобулся и разблокировал бота:\n'
-             f'@{user_nickname}\;\nID: `{user_id}`',
-        parse_mode='MarkdownV2'
+        text=f'❗️Внимание! Этот кусок мяса переобулся и разблокировал бота:\n'
+             f'@{user_nickname};\nID: <code>{user_id}</code>',
     )

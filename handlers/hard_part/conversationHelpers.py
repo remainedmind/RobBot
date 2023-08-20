@@ -74,7 +74,7 @@ async def send_answer(answer_message: Message, answer: str, button: InlineKeyboa
         await message.reply(text=texts[-1], reply_markup=button)
 
 
-async def process_question(user_id: int, message: Message, user_info: dict, text: Optional[str] = None) -> Tuple[str, int, str]:
+async def process_question(user_id: int, message: Message, bot: Bot, user_info: dict, text: Optional[str] = None) -> Tuple[str, int, str]:
     """
 
     :param message: if we ask from typing, we extract the qustion text from here
@@ -118,7 +118,7 @@ async def process_question(user_id: int, message: Message, user_info: dict, text
                 user_id=user_id,
                 user_status=user_status,
                 temperature=temperature),
-            escort(user_status=user_status, message=message, lang=lang, target='text')
+            escort(user_status=user_status, message=message, bot=bot, lang=lang, target='text')
         )
         ans_text, coins = response[0], response[1]
 
@@ -149,7 +149,7 @@ async def process_question(user_id: int, message: Message, user_info: dict, text
                      user_id=user_id,
                      user_status=user_status,
                      temperature=temperature),
-            escort(user_status=user_status, message=message, lang=lang, target='text')
+            escort(user_status=user_status, message=message, bot=bot, lang=lang, target='text')
         )
         ans_text, coins = response[0], response[1]
         button = conconkb.start_kb[lang]
@@ -267,7 +267,7 @@ async def process_voice(user_id: int, message: Message, state: FSMContext, bot: 
     response, ans_message = await asyncio.gather(
         transcribe(file_path, file_id, bot, lang),
         # transcribe(file, file_id, lang),
-        escort(user_status=user_status, message=message, lang=lang, target='voice')
+        escort(user_status=user_status, message=message,  bot=bot, lang=lang, target='voice')
     )
 
     markup = None
@@ -292,7 +292,7 @@ async def process_voice(user_id: int, message: Message, state: FSMContext, bot: 
 
 
 
-async def process_drawing(user_id, message: Message, text: str, user_info: dict) -> None:
+async def process_drawing(user_id, message: Message, bot: Bot, text: str, user_info: dict) -> None:
 
     user_status = await check_for_premium(user_id)
     lang = user_info['language']
@@ -314,7 +314,7 @@ async def process_drawing(user_id, message: Message, text: str, user_info: dict)
     response, ans_message = await asyncio.gather(
         # ssp.get_text(dialogue.chat, message.from_user.id),
         get_photo(data=text, user_id=user_id, n=photos_number, dimension=dim, d_art=d_art, lang=lang),
-        escort(user_status=user_status, message=message, lang=lang, target='photo')
+        escort(user_status=user_status, message=message,  bot=bot, lang=lang, target='photo')
     )
     photo_URLs, coins = response[0], response[1]
     if photo_URLs:

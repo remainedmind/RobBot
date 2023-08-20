@@ -11,7 +11,7 @@ class CasinoCallback(CallbackData, prefix="casino"):
     """
     """
     action: str  # play, rules
-    value: Optional[int]
+    value: Optional[int] = None
 
 casino_start_kb = {
     'en':

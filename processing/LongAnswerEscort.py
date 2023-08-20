@@ -1,6 +1,6 @@
 import asyncio
 import random
-from aiogram import exceptions
+from aiogram import exceptions, Bot
 from aiogram.types import Message
 from aiogram.methods.send_chat_action import SendChatAction
 # from aiogram.utils.chat_action import ChatActionSender
@@ -44,7 +44,7 @@ async def spin(msg, text, delay):
 
 
 
-async def escort(user_status: str, message: Message, target, lang='en', delay: int=2):
+async def escort(user_status: str, message: Message, bot: Bot, target, lang='en', delay: int=2):
     """
     Предварительное редактирование сообщения. которео в итоге
     будет заменено на ответ Бота
@@ -71,7 +71,7 @@ async def escort(user_status: str, message: Message, target, lang='en', delay: i
     answer = ma_texts['answering'][target][lang]
     reply = await message.reply(answer[0 + option])
 
-    await SendChatAction(chat_id=chat_id, action=action)
+    await bot(SendChatAction(chat_id=chat_id, action=action))
     # ЗАМЕНИТЬ НА: |
     #_________________
     # async with ChatActionSender.typing(chat_id=message.chat.id, bot=bot):

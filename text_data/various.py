@@ -15,10 +15,9 @@ string_for_re_searching = "(" + ')|('.join(words_to_image) + ")"
 #     'flip': ("\U0001FA99",)
 # }
 emojis = {
-    'key': (0, 1,2,3,4,5),
-    'emojis': ("🎲", "🎳", "🎯", "🏀", "⚽", "\U0001FA99"),
-    'type': ('dice', 'dice', 'dice', 'dice', 'dice', 'flip'),
-    'weights': (1,1,1,1,1,2)
+    'key': (0, 1, 2, 3, 4),
+    'emojis': ("🎲", "🎳", "🎯", "🏀", "⚽",),
+    'weights': (1,1,1,1,1)
 }
 links_cover = {
         'en': "link",

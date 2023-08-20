@@ -1,5 +1,5 @@
 """
-Незарегестрированному пользователю будет доступна
+Незарегистрированному пользователю будет доступна
 только команда /start. В качестве проверки используется фукнция,
 которая достаёт из БД установленный язык.
 Сразу после регистрации устанавливаются все дефолтные настройки
@@ -23,6 +23,8 @@ from text_data.user_settings import PROPERTIES_DEFAULT_VALUES
 from keyboards.BasicKeyboards import more_coins_kb
 from aiogram.dispatcher.flags import get_flag
 
+from app.set_menu_commands import set_personal_menu_commands
+
 
 class BalanceCheckMiddleware(BaseMiddleware):
     async def __call__(
@@ -31,10 +33,20 @@ class BalanceCheckMiddleware(BaseMiddleware):
         event: Message | CallbackQuery,
         data: Dict[str, Any],
     ) -> Any:
+
         # Достаём данные из машины состояний
         fsm_data = data['state']
         user_id = event.from_user.id
-        # print(await get_balance_and_total(id), get_flag(data, "coins_minimum"))
+        chat_id = event.chat.id
+        lang = (await fsm_data.get_data())['language']
+
+        # Firstly, update all menu commands to the last version
+        await set_personal_menu_commands(
+            chat_id=chat_id, user_id=user_id, lang=lang, bot=data['bot']
+        )
+
+
+
 
         user_info = await get_user_info_quickly(user_id)
         balance = user_info['balance']
@@ -46,7 +58,7 @@ class BalanceCheckMiddleware(BaseMiddleware):
         if (min_balance is None) or balance > min_balance:
             return await handler(event, data)
         else:
-            lang = (await fsm_data.get_data())['language']
+            # lang = (await fsm_data.get_data())['language']
             type = 'zero' if min_balance == 0 else 'lack'
             update_date = await get_date_of_coins_updating(lang, user_info['expiry'])
             await event.answer(answers_texts['insufficient_balance'][type][lang].format(update_date),

@@ -3,7 +3,7 @@ import asyncio
 from aiogram import Router, F, Bot, exceptions
 # from aiogram.filters import or_f, in_
 from aiogram.types import Message, CallbackQuery, BotCommand, LabeledPrice, SuccessfulPayment, PreCheckoutQuery, successful_payment, ContentType
-from aiogram.filters import CommandStart, Command, Text, Filter, CommandObject
+from aiogram.filters import CommandStart, Command, Filter, CommandObject
 from aiogram.methods.send_message import SendMessage
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.deep_linking import create_start_link
@@ -130,7 +130,8 @@ async def send_invoice(
 async def confirm_feedback(
         callback: CallbackQuery,
         callback_data: FeedbackCallback,
-        state: FSMContext
+        state: FSMContext,
+        bot: Bot
 ):
     id = callback.from_user.id
 
@@ -142,13 +143,13 @@ async def confirm_feedback(
         status = info['status']
         referrals = info['referrals']
         balance = info['balance']
-        await SendMessage(
+        await bot(SendMessage(
             chat_id=TG_SUPPORT_ID,
             text = ma_texts['feedback']['message_from_user'].format(
                 username, id, status, balance, referrals
             ),
             # parse_mode='MarkdownV2'
-        )
+        ))
         await callback.message.forward(chat_id=TG_SUPPORT_ID,)
         await callback.message.delete_reply_markup()
         await callback.message.reply(ma_texts['feedback']['was_sent_to_admin'][lang])
@@ -165,12 +166,12 @@ async def confirm_feedback(
             # arg = {'nickname': user_to_send[1:]}  # Срезаем @
         lang = await get_lang(user_id)
         if lang:
-            await SendMessage(
+            await bot(SendMessage(
                 chat_id=user_id,
                 text = ma_texts['feedback']['message_from_admin'][lang].format(
                     callback.message.text
                 ),
-            )
+            ))
             # await callback.message.forward(chat_id=TG_SUPPORT_ID,)
             await callback.message.delete_reply_markup()
             await state.set_state(UserStates.main)

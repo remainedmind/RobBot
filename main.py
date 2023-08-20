@@ -31,9 +31,8 @@ from processing.SQL_processingg.SQL_low_level_processing import shutdown_connect
 
 async def main() -> None:
 
-
+    # To store states, we use Redis (while development, it's off - uncomment for production)
     # redistorage = RedisStorage.from_url('redis://localhost:6379/0')
-
 
     # dp = Dispatcher(storage=redistorage)
     dp = Dispatcher()

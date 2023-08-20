@@ -1,10 +1,13 @@
 
 import os
+# import whisper  # Requires powerful server
 import aiohttp
 from pydub import AudioSegment
 from aiogram import Bot
 
 from secret_data import GPT_TOKEN, GPT_WHISPER_URL
+
+
 
 async def transcribe(file_path, file_id, bot: Bot, lang: str | None=None) -> dict | None:
     """
@@ -47,7 +50,6 @@ async def transcribe(file_path, file_id, bot: Bot, lang: str | None=None) -> dic
     # if lang and lang != 'en':  # With english language set User can speak any language
     #     data.add_field("language", lang)
 
-    # data.add_field("response_format", 'text')
     try:
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, data=data) as response:

@@ -261,6 +261,12 @@ answers_texts = {
             'en': "Please wait <b>{}</b> seconds more.",
             'ru': "Пожалуйста, подождите ещё <b>{}</b> секунд."
     },
+    'unexpected_image': {
+        'en': "Sorry, I am unable to process this file. Please make sure your actions are correct. \n"
+              "Need help? Write '<code>Admin, </code>' and your message",
+        'ru': "К сожалению, я не могу обработать этот файл. Убедитесь, что вы всё делаете правильно.\n"
+              "Нужна помощь? Напишите <code>Админ, </code> и ваше сообщение."
+    },
 
 
 

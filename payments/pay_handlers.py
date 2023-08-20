@@ -4,7 +4,7 @@ import secrets
 from aiogram import Router, F, Bot, md
 
 from aiogram.types import Message, CallbackQuery, BotCommand, LabeledPrice, SuccessfulPayment, PreCheckoutQuery, successful_payment, ContentType, TelegramObject
-from aiogram.filters import CommandStart, Command, Text, Filter, CommandObject
+from aiogram.filters import Command, Filter, or_f, invert_f
 from aiogram.methods.send_message import SendMessage
 from aiogram.methods.send_photo import SendPhoto
 from aiogram.fsm.context import FSMContext
@@ -39,15 +39,13 @@ from processing.timeProcessing import get_expiry_date
 
 @router.message(F.content_type == ContentType.SUCCESSFUL_PAYMENT)
 async def handle_successfull_payment(
-        # payment: SuccessfulPayment,
         message: Message,
         state: FSMContext,
 
 ):
+    """ IS NOT USED (NO PROVIDER)"""
     lang = (await state.get_data())['language']
     user_id = message.from_user.id
-    # print(SuccessfulPayment)
-    # print(message.date.utcnow(), message.successful_payment, sep='\n\n')
     payment = message.successful_payment
     payload = payment.invoice_payload
     now = message.date.utcnow()
@@ -76,6 +74,7 @@ async def handle_precheckout(
         query: PreCheckoutQuery,
 
 ):
+    """ IS NOT USED (NO PROVIDER)"""
     user = query.from_user
     new_payment = await sql_high_p.add_new_payment(
         query_id=query.id,
@@ -120,17 +119,17 @@ async def callbacks_num_change_fab(
     print(subject, value, action, item, data, price, currency)
     if item:
         category, subcategory = item.split('-')
-    if action == 'show':  # Показать текущее значение или доступные варианты
+
+
+    if action == 'show':  # Show current value and options
         if subject == 'all_goods':
             text += PURCHASE_STEPS['description_of_product'][data][lang]
             markup = pkb.options_kb[data][lang]
         elif subject == 'specific_product':
-            # print(ptexts.description_of_product, category)
             text += ptexts.product_synonym[lang].format(
                 ptexts.product_description[category][lang].format(
                 payment_config.ALL_GOODS[category][subcategory]['value'])
             )
-                                                               # payment_config.ALL_GOODS[category][subcategory]['value'
             text += ptexts.go_next[lang]
 
             # markup = await pkb.get_buy_keyboard(data=data, value=value, currency=currency, price=price, lang=lang)
@@ -206,7 +205,7 @@ async def callbacks_num_change_fab(
         payload = f"{category}-{value}-{secrets.token_hex(8)}"
         if method_info['through_provider']:
             provider = method_info['provider_token']
-            label = ptexts.goods_description[category][lang].format(value)
+            label = ptexts.product_description[category][lang].format(value)
             price = payment_config.PRICE_LIST.loc[item][method] * 100
             # Transform int to LabelPrice
             payment_data = dict(
@@ -349,7 +348,7 @@ async def callbacks_num_change_fab(
         await callback.message.edit_reply_markup(reply_markup=markup)
 
 
-@router.message(UserStates.sending_receipt, F.photo)
+@router.message(UserStates.sending_receipt, or_f(F.photo, F.file))
 async def photo_msg(message: Message, state: FSMContext):
     user_id = message.from_user.id
     user_info = await state.get_data()
@@ -379,11 +378,11 @@ async def photo_msg(message: Message, state: FSMContext):
     await state.set_state(UserStates.main)
     await message.answer(PURCHASE_STEPS['catch_screenshot'][lang])
 
+
 @router.message(UserStates.sending_receipt)
 async def photo_msg(message: Message, state: FSMContext):
     user_info = await state.get_data()
     lang = user_info['language']
-
     await message.answer(PURCHASE_STEPS['complete_the_payment'][lang])
 
 

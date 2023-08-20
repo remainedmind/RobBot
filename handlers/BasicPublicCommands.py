@@ -1,13 +1,14 @@
 """
 
 """
+import pickle
 from datetime import datetime
 
 import aiogram.exceptions
 from aiogram import Router, F, md, html, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
-from aiogram.filters import CommandStart, Command, Text, Filter, CommandObject, invert_f, or_f, and_f
+from aiogram.filters import CommandStart, Command, Filter, CommandObject, invert_f, or_f, and_f
 from aiogram.utils.deep_linking import decode_payload
 from aiogram.methods.send_message import SendMessage
 
@@ -30,6 +31,7 @@ from processing.AccountProcessing import get_account_details
 from processing.LightFucntions import get_emoji
 
 from app.set_menu_commands import set_personal_menu_commands
+from keyboards import ConversationContextKeyboard as conconkb
 
 router = Router()
 
@@ -118,12 +120,9 @@ async def dice_command(message: Message) -> None:
     """
        Simple dice. Artificial - yes :)   Intelligence - no :(
        """
-    emoji, action_type = await get_emoji(message.message_id)
+    emoji = await get_emoji(message.message_id)
+    await message.answer_dice(emoji=emoji)
 
-    if action_type == 'dice':
-        await message.answer_dice(emoji=emoji)
-    else:  # Flip
-        await message.answer(text=emoji)
 
 
 @router.message(Command(commands=["account"]))
@@ -138,13 +137,45 @@ async def account_command_handler(message: Message, state: FSMContext) -> None:
     ), reply_markup=bkb.account_from_command_kb[lang])
 
 
-@router.message(or_f(F.photo, F.text), (Text(startswith=('Admin,', 'Админ,'))))
-async def send_message2admin(message: Message, state: FSMContext) -> None:
+
+@router.message(Command(commands=["reset"]))
+async def callbacks_num_change_fab(
+        message: Message, state: FSMContext
+):
+    lang = (await state.get_data())['language']
+
+    try:
+        dialogue = (await state.get_data())['dialogue']
+        dialogue: conconkb.Chat = pickle.loads(bytes.fromhex(dialogue))
+    except KeyError:
+        dialogue = conconkb.Chat()
+
+    await dialogue.reset_chat()
+
+    # Transform Object instance to string to make it storable
+    dialogue = pickle.dumps(dialogue).hex()
+    await state.update_data(dialogue=dialogue)
+
+    # await callback.message.edit_reply_markup()
+    # await callback.answer(callback_answers.conversation[action][lang])
+    await message.reply(ma_texts['conversation']['reset'][lang])
+
+
+@router.message(or_f(F.photo, F.text, F.document),
+                or_f(
+                    F.text.startswith('Admin'),  F.text.startswith('Админ'), F.caption.startswith("Admin")
+                )
+                )
+async def send_message2admin(message: Message, state: FSMContext, bot: Bot) -> None:
     lang = (await state.get_data())['language']
 
     if message.photo:  # We got photo
         text = message.caption[7:]
         sender = message.answer_photo(photo=message.photo[0].file_id, caption=text, reply_markup=confirm_feedback_kb[lang], parse_mode=None)
+    elif message.document:  # We got docs
+        text = message.caption[7:]
+        sender = message.answer_document(document=message.document.file_id, caption=text,
+                                      reply_markup=confirm_feedback_kb[lang], parse_mode=None)
     else:  # text only
         text = message.text[7:]
         sender = message.answer(text=text, reply_markup=confirm_feedback_kb[lang], parse_mode=None)
@@ -155,7 +186,7 @@ async def send_message2admin(message: Message, state: FSMContext) -> None:
         await message.reply(ma_texts['feedback']['empty'][lang])
 
 
-@router.message(Text(startswith='!'), IsPromocode())
+@router.message(F.text(startswith='!'), IsPromocode())
 async def check_promocode(message: Message, state: FSMContext, validity: bool, bonus: int) -> None:
     """
     Promo code handling.
@@ -172,3 +203,5 @@ async def check_promocode(message: Message, state: FSMContext, validity: bool, b
             id=id, charge=bonus, method='put'
         )
     await message.reply(ma_texts['promocode'][validity][lang])
+
+

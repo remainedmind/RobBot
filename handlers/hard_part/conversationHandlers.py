@@ -7,7 +7,7 @@ from aiogram.dispatcher.event.handler import HandlerObject
 from aiogram.utils.chat_action import ChatActionSender
 
 from aiogram.types import Message, CallbackQuery, InputMediaPhoto
-from aiogram.filters import Command, Text, Filter, or_f, invert_f
+from aiogram.filters import Command, Filter, or_f, invert_f
 
 from keyboards import BasicKeyboards as bkb
 
@@ -41,7 +41,7 @@ router.message.filter(invert_f(UserStates.need_to_unblock_bot))
 
 
 @router.message(Command(commands=["ask"]), flags={"throttling": 20, 'coins_minimum': 0})
-async def command_start_handler(message: Message, state: FSMContext, command: Command) -> None:
+async def command_start_handler(message: Message, state: FSMContext, command: Command, bot: Bot) -> None:
     user_id = message.from_user.id
     param = command.args
     user_info = await state.get_data()
@@ -49,7 +49,7 @@ async def command_start_handler(message: Message, state: FSMContext, command: Co
     await state.set_state(UserStates.main)
     if param:
         # response = (await asyncio.gather(process_question(message=message, state=state, text=param), escort(message=message, lang=lang, target='text')))
-        dialogue, coins, removed_old = await process_question(user_id=user_id, message=message, user_info=user_info, text=param)
+        dialogue, coins, removed_old = await process_question(user_id=user_id, message=message, bot=bot, user_info=user_info, text=param)
         if dialogue:
             dialogue = pickle.dumps(dialogue).hex()
             # dialogue = pickle.loads(bytes.fromhex(dialogue))
@@ -66,12 +66,12 @@ async def command_start_handler(message: Message, state: FSMContext, command: Co
 
 
 @router.message(Command(commands=["image"]), flags={"throttling": 20, 'coins_minimum': 600})
-async def draw(message: Message, command: Command, state: FSMContext, handler: HandlerObject) -> None:
+async def draw(message: Message, command: Command, state: FSMContext, bot: Bot) -> None:
     param = command.args
     user_id = message.from_user.id
     user_info = await state.get_data()
     if param:
-        coins = await process_drawing(user_id, message, param, user_info)
+        coins = await process_drawing(user_id, message, bot, param, user_info)
         await sql_high_p.change_coins_balance(user_id, coins)
         await state.set_state(UserStates.main)
     else:
@@ -80,20 +80,20 @@ async def draw(message: Message, command: Command, state: FSMContext, handler: H
         await message.reply(ma_texts['answering']['photo'][lang][0], reply_markup=bkb.cancel_kb[lang])
 
 
-@router.message(Text(startswith=words_to_image, ignore_case=True), F.text.as_("text"),  flags={"throttling": 20, 'coins_minimum': 600})
-async def draw(message: Message, text, state: FSMContext) -> None:
-    user_id = message.from_user.id
-    user_info = await state.get_data()
-    match = re.search(string_for_re_searching, string=text.lower())
-    # We don't need to check match because we already handled proper message
-    text = text[match.end():]
-    await state.set_state(UserStates.main)
-    coins = await process_drawing(user_id, message, text, user_info)
-    await sql_high_p.change_coins_balance(user_id, coins)
+# @router.message(F.text(startswith=words_to_image, ignore_case=True), F.text.as_("text"),  flags={"throttling": 20, 'coins_minimum': 600})
+# async def draw(message: Message, text, state: FSMContext) -> None:
+#     user_id = message.from_user.id
+#     user_info = await state.get_data()
+#     match = re.search(string_for_re_searching, string=text.lower())
+#     # We don't need to check match because we already handled proper message
+#     text = text[match.end():]
+#     await state.set_state(UserStates.main)
+#     coins = await process_drawing(user_id, message, text, user_info)
+#     await sql_high_p.change_coins_balance(user_id, coins)
 
 
 @router.message(UserStates.image_generation, F.text,  flags={"throttling": 20, 'coins_minimum': 600})
-async def command_start_handler(message: Message, state: FSMContext) -> None:
+async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -> None:
     """
 
     :param message:
@@ -103,7 +103,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     user_id = message.from_user.id
     user_info = await state.get_data()
     await state.set_state(UserStates.main)
-    coins = await process_drawing(user_id, message, message.text, user_info)
+    coins = await process_drawing(user_id, message, bot, message.text, user_info)
     print(user_id)
     await sql_high_p.change_coins_balance(user_id, coins)
 
@@ -121,8 +121,9 @@ async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -
     user_info = await state.get_data()
     lang = user_info['language']
     await state.set_state(UserStates.main)
+    return await message.answer("Got it, bro.")
 
-    dialogue, coins, removed_old = await process_question(user_id, message, user_info)
+    dialogue, coins, removed_old = await process_question(user_id, message, bot, user_info)
     if dialogue:
         dialogue = pickle.dumps(dialogue).hex()
         await state.update_data(dialogue=dialogue)
