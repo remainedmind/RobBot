@@ -1,7 +1,5 @@
 import asyncio
 import logging
-
-
 from aiogram import Bot, Dispatcher
 from aiogram.dispatcher.event.event import EventObserver
 from aiogram.filters import invert_f
@@ -24,10 +22,17 @@ from middlewares.RegistrationCheck import AccessCheckMiddleware
 
 from processing.SQL_processingg.SQL_low_level_processing import create_table, collect_columns, open_connection
 from app.set_menu_commands import set_default_command_menu
-from app.coins_updating import behind_loop
+from app.coins_updating import behind_loop, update_users_coins
 from processing.SQL_processingg.SQL_low_level_processing import shutdown_connection
 
-# def shutdown_redis()
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
+scheduler = AsyncIOScheduler()
+
+def job_function(dp, bot):
+    print("Call me maybe...")
+
 
 async def main() -> None:
 
@@ -40,7 +45,7 @@ async def main() -> None:
     # When shutdown, we close SQL and Redis connections
     observer = EventObserver()
     observer.register(shutdown_connection)
-    # observer.register(redistorage.close)
+    # observer.register(redistorage.close)  # To shutdown
 
     dp.include_routers(
         BotBlockingHandler.router,
@@ -58,14 +63,24 @@ async def main() -> None:
     dp.message.middleware(AccessCheckMiddleware())
     dp.callback_query.middleware(AccessCheckMiddleware())
 
-
     bot = Bot(TG_TOKEN, parse_mode="HTML")
+
+    scheduler.add_job(
+        job_function, 'interval', seconds=500,
+        kwargs={"dp": dp, "bot": bot,}
+    )
+    scheduler.add_job(
+        update_users_coins, 'interval', seconds=5,
+        kwargs={"bot": bot,}
+    )
+    scheduler.start()
 
 
     await set_default_command_menu(bot)
 
     loop = asyncio.get_event_loop()
-    loop.create_task(behind_loop(bot))
+    # loop.create_task(behind_loop(bot))
+    # loop.create_task()
 
     # And the run events dispatching
     await dp.start_polling(bot, skip_updates=True)

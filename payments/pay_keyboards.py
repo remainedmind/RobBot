@@ -20,15 +20,15 @@ import payments.pay_text_data as ptexts
 class PaymentsCallback(CallbackData, prefix="payments"):
     """
     """
-    action: Optional[str]  # Show | Pay | Back
-    # type: Optional[str]  # type of goods | type of action
-    # data: Optional[str]  # info
-    subject: Optional[str]  # Out target to show, buy, e.t.c
-    # payment_method: Optional[str]
-    # currency: Optional[str]
-    # price: Optional[int]
-    # value: Optional[int]
-    item: Optional[str]  # Type of product
+    action: Optional[str]  = None # Show | Pay | Back
+    type: Optional[str]  = None # type of goods | type of action
+    data: Optional[str]  = None # info
+    subject: Optional[str]  = None # Out target to show, buy, e.t.c
+    payment_method: Optional[str] = None
+    currency: Optional[str] = None
+    price: Optional[int] = None
+    value: Optional[int] = None
+    item: Optional[str]  = None  # Type of product
 
 
 options_kb = {
@@ -45,8 +45,10 @@ options_kb = {
                     subject='specific_product',
                     item='coins-2'
                 ).pack())],
-                [InlineKeyboardButton(text="⬅ Back", callback_data=PaymentsCallback(action='back_to', subject='market', item=None).pack())],
-                # [InlineKeyboardButton(text="⬅ Back", callback_data="market")]
+                [InlineKeyboardButton(text="⬅ Back",
+                                      callback_data=PaymentsCallback(
+                                          action='back_to', subject='market', item=None
+              ).pack())],
             ]
     ),
         'ru':  InlineKeyboardMarkup(inline_keyboard =[
@@ -62,7 +64,11 @@ options_kb = {
                     action='show',
                     subject='specific_product',
                     item='coins-2').pack())],
-                [InlineKeyboardButton(text="⬅ Back", callback_data=PaymentsCallback(action='back_to', subject='market', item=None).pack())],
+                [InlineKeyboardButton(
+                    text="⬅ Back",
+                    callback_data=PaymentsCallback(
+                        action='back_to', subject='market', item=None
+                    ).pack())],
                 # [InlineKeyboardButton(text="⬅ Back", callback_data="market")]
             ]
     ),
@@ -102,15 +108,12 @@ options_kb = {
 buy_sub_kb = {
     'user':  {
         'en': InlineKeyboardMarkup(inline_keyboard =[
-            # [InlineKeyboardButton(text="Increase limit by 2 times", callback_data=PaymentsCallback(action='show', subject='all_goods', data='sub').pack())],
-            [InlineKeyboardButton(text="Increase limit by 2 times",
-                                  callback_data=PaymentsCallback(action='show', subject='all_goods',
-                                                                 item='sub').pack())],
+            [InlineKeyboardButton(text="Increase limit by 2 times", callback_data=PaymentsCallback(action='show', subject='all_goods', data='sub').pack())],
 
         ]
         ),
             'ru': InlineKeyboardMarkup(inline_keyboard =[
-            [InlineKeyboardButton(text="Увеличить лимит в 2 раза", callback_data=PaymentsCallback(action='show', subject='all_goods', item='sub').pack())],
+            [InlineKeyboardButton(text="Увеличить лимит в 2 раза", callback_data=PaymentsCallback(action='show', subject='all_goods', data='sub').pack())],
                 ]
         ),
     },
@@ -120,16 +123,16 @@ buy_sub_kb = {
 
 first_market_opening_kb = {
     'en': InlineKeyboardMarkup(inline_keyboard =[
-                [InlineKeyboardButton(text="\U0001F4B5	 More BOTcoins", callback_data=PaymentsCallback(action='show', subject='all_goods', item='coins').pack())],
-                [InlineKeyboardButton(text="💎 Premium subcription", callback_data=PaymentsCallback(action='show', subject='all_goods', item='sub').pack())],
-                [InlineKeyboardButton(text="⁉ Why do I have to pay?", callback_data=PaymentsCallback(action='show', subject='info', item='restriction_reason').pack())],
+                [InlineKeyboardButton(text="\U0001F4B5	 More BOTcoins", callback_data=PaymentsCallback(action='show', subject='all_goods', data='coins').pack())],
+                [InlineKeyboardButton(text="💎 Premium subcription", callback_data=PaymentsCallback(action='show', subject='all_goods', data='sub').pack())],
+                [InlineKeyboardButton(text="⁉ Why do I have to pay?", callback_data=PaymentsCallback(action='show', subject='info', data='restriction_reason').pack())],
                 [InlineKeyboardButton(text="⬅ Back", callback_data="main")]
         ]
     ),
     'ru': InlineKeyboardMarkup(inline_keyboard =[
-                [InlineKeyboardButton(text="\U0001FA99 Больше БОТкоинов", callback_data=PaymentsCallback(action='show', subject='all_goods', item='coins').pack())],
-                [InlineKeyboardButton(text="💎 Премиум-подписка", callback_data=PaymentsCallback(action='show', subject='all_goods', item='sub').pack())],
-                [InlineKeyboardButton(text="⁉ Платить? За что?", callback_data=PaymentsCallback(action='show', subject='info', item='restriction_reason').pack())],
+                [InlineKeyboardButton(text="\U0001FA99 Больше БОТкоинов", callback_data=PaymentsCallback(action='show', subject='all_goods', data='coins').pack())],
+                [InlineKeyboardButton(text="💎 Премиум-подписка", callback_data=PaymentsCallback(action='show', subject='all_goods', data='sub').pack())],
+                [InlineKeyboardButton(text="⁉ Платить? За что?", callback_data=PaymentsCallback(action='show', subject='info', data='restriction_reason').pack())],
                 [InlineKeyboardButton(text="⬅ Назад", callback_data="main",)]
         ]
     )
@@ -138,14 +141,14 @@ first_market_opening_kb = {
 
 market_kb = {
     'en': InlineKeyboardMarkup(inline_keyboard =[
-                [InlineKeyboardButton(text="\U0001FA99 More BOTcoins", callback_data=PaymentsCallback(action='show', subject='all_goods', item='coins').pack())],
-                [InlineKeyboardButton(text="💎 Premium subcription", callback_data=PaymentsCallback(action='show', subject='all_goods', item='sub').pack())],
+                [InlineKeyboardButton(text="\U0001FA99 More BOTcoins", callback_data=PaymentsCallback(action='show', subject='all_goods', data='coins').pack())],
+                [InlineKeyboardButton(text="💎 Premium subcription", callback_data=PaymentsCallback(action='show', subject='all_goods', data='sub').pack())],
                 [InlineKeyboardButton(text="⬅ Back", callback_data="main")]
         ]
     ),
     'ru': InlineKeyboardMarkup(inline_keyboard =[
-                [InlineKeyboardButton(text="\U0001FA99 Больше БОТкоинов", callback_data=PaymentsCallback(action='show', subject='all_goods', item='coins').pack())],
-                [InlineKeyboardButton(text="💎 Премиум-подписка", callback_data=PaymentsCallback(action='show', subject='all_goods', item='sub').pack())],
+                [InlineKeyboardButton(text="\U0001FA99 Больше БОТкоинов", callback_data=PaymentsCallback(action='show', subject='all_goods', data='coins').pack())],
+                [InlineKeyboardButton(text="💎 Премиум-подписка", callback_data=PaymentsCallback(action='show', subject='all_goods', data='sub').pack())],
                 [InlineKeyboardButton(text="⬅ Назад", callback_data="main")]
         ]
     )
@@ -157,7 +160,7 @@ async def get_buy_button(item: str, lang='en'):
     buy_text = '➡ Купить' if lang == 'ru' else '➡ Buy'
     builder.button(text=buy_text, callback_data=PaymentsCallback(action='show', subject='payment_ways', item=item))
     cancel_text = '⬅ Назад' if lang =='ru' else '⬅ Back'
-    builder.button(text=cancel_text, callback_data=PaymentsCallback(action='show', subject='all_goods', item=item.split('-')[0]))
+    builder.button(text=cancel_text, callback_data=PaymentsCallback(action='show', subject='all_goods', data=item.split('-')[0]))
     builder.adjust(1)
     return builder.as_markup()
 
@@ -247,11 +250,11 @@ async def buy_with_balance(item: str, currency: str, method: str, lang='en'):
 
 sub_buying_failed_kb = {
     'en': InlineKeyboardMarkup(inline_keyboard =[
-            [InlineKeyboardButton(text="Back", callback_data=PaymentsCallback(action='show', subject='all_goods', item='sub').pack())],
+            [InlineKeyboardButton(text="Back", callback_data=PaymentsCallback(action='show', subject='all_goods', data='sub').pack())],
                 ]
     ),
     'ru': InlineKeyboardMarkup(inline_keyboard =[
-            [InlineKeyboardButton(text="Назад", callback_data=PaymentsCallback(action='show', subject='all_goods', item='sub').pack())],
+            [InlineKeyboardButton(text="Назад", callback_data=PaymentsCallback(action='show', subject='all_goods', data='sub').pack())],
                 ]
         ),
 }
@@ -261,9 +264,9 @@ async def get_pay_button(item: str, currency: str, method: str, lang='en'):
 
     builder = InlineKeyboardBuilder()
 
-    builder.button(text=buy_text, callback_data=PaymentsCallback(action='pay', subject=method, item=item,
-                                                             currency=currency
-                                                                 ))
+    builder.button(text=buy_text, callback_data=PaymentsCallback(
+        action='pay', subject=method, item=item, currency=currency
+    ))
 
 
     cancel_text = '⬅ Назад' if lang == 'ru' else '⬅ Back'

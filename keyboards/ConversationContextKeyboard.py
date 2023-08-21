@@ -53,7 +53,6 @@ class Chat():
         self.active = False  # Будем ли мы запоминать контекст
 
     async def start_chat(self):
-        print('Начали чат')
         self.chat.clear()
         self.active = True
 

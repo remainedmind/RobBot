@@ -116,7 +116,6 @@ async def callbacks_num_change_fab(
     user_id = callback.from_user.id
     markup = None
     subject, value, action, item, data, price, currency = callback_data.subject, callback_data.value, callback_data.action, callback_data.item, callback_data.data, callback_data.price, callback_data.currency
-    print(subject, value, action, item, data, price, currency)
     if item:
         category, subcategory = item.split('-')
 
@@ -147,7 +146,7 @@ async def callbacks_num_change_fab(
         elif subject == 'info':
             if data == 'restriction_reason':
                 markup = pkb.market_kb[lang]
-                # await callback.message.edit_reply_markup(reply_markup=market_kb[lang])
+                text = callback.message.text
                 await callback.answer(callback_answers.restriction_reason_in_market[lang], show_alert=True)
 
     elif action == 'back_to':

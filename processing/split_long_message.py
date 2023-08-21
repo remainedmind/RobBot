@@ -1,5 +1,4 @@
 import typing
-import asyncio
 MAX_MESSAGE_LENGTH = 3000
 
 

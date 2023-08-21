@@ -186,7 +186,7 @@ async def send_message2admin(message: Message, state: FSMContext, bot: Bot) -> N
         await message.reply(ma_texts['feedback']['empty'][lang])
 
 
-@router.message(F.text(startswith='!'), IsPromocode())
+@router.message(F.text.startswith('!'), IsPromocode())
 async def check_promocode(message: Message, state: FSMContext, validity: bool, bonus: int) -> None:
     """
     Promo code handling.

@@ -29,9 +29,6 @@ class AccessCheckMiddleware(BaseMiddleware):
         event: Message | CallbackQuery,
         data: Dict[str, Any],
     ) -> Any:
-
-        print(data)
-
         try:
             user_id = event.from_user.id
             chat_id = event.chat.id

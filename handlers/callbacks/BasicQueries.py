@@ -88,22 +88,9 @@ async def send_invoice(
         bot: Bot
 ):
     lang = (await state.get_data())['language']
-    # 381764678: TEST:51844
     await callback.message.edit_text(
         ma_texts['market'][lang]+main_market_description[lang],
         reply_markup=first_market_opening_kb[lang])
-    # await callback.message.reply_invoice(
-    #     title='КУПИ',
-    #     description='купи',
-    #     payload='покупка',
-    #     provider_token='381764678: TEST:51844',
-    #     currency='RUB',
-    #     prices=prices,
-    #     allow_sending_without_reply = True
-    #
-    # )
-    #
-    # await callback.message.reply('ВОТ', reply_markup=bkb.tinkoff)
 
 @router.callback_query(F.data == 'cancel')
 async def callbacks_num_change_fab(
@@ -123,7 +110,7 @@ async def send_invoice(
         bot: Bot
 ):
     lang = (await state.get_data())['language']
-    # 381764678: TEST:51844
+    print("вот тут")
     await callback.answer(callback_answers.restriction_reason_in_help[lang], show_alert=True)
 
 @router.callback_query(FeedbackCallback.filter())
@@ -211,12 +198,7 @@ async def callbacks_num_change_fab(
     user_id = callback.from_user.id
     chat_id = callback.message.chat.id
     lang = (await state.get_data())['language']
-    # user_id = callback.from_user.id
-    # chat_id = callback.message.chat.id
-    # await set_personal_menu_commands(
-    #     chat_id=chat_id, user_id=user_id, lang=lang, bot=bot
-    # )
-    # await state.update_data(language=lang)
+
     await callback.answer(callback_answers.language_set[lang])
     if chat_id == user_id:
         await callback.message.edit_text(

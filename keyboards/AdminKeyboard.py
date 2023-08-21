@@ -15,10 +15,10 @@ class AdminCallbacks(CallbackData, prefix="admin_panel"):
     Класс для работы с контектом во время переписки с ботом:
     начало ведения диалога, сброс, выключение контекста
     """
-    user_id: Optional[int]
-    status: Optional[str]  # premium | user
-    action: str | int
-    data: Optional[str | int]
+    user_id: Optional[int] = None
+    status: Optional[str]  = None # premium | user
+    action: str | int = None
+    data: Optional[str | int] = None
 
 
 

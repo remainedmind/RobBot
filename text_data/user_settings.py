@@ -23,7 +23,7 @@ PROPERTIES_DESCRIPTIONS = {
                "answer more deterministic. Also, high values can increase the "
                "length of the response.\nThe recommended value is 50%, but "
                "feel free to experiment!"),
-        'ru': "Параметр, отвечающий за креативность  бота при генерации"
+        'ru': "Параметр, отвечающий за креативность бота при генерации"
               " текста. Высокое значение делает ответ бота более "
               "рандомным и креативным, а низкое - более стабильным и, "
               "возможно, более релевантным.\nТакже высокие значения "

@@ -168,7 +168,6 @@ async def get_user_info(id=None, nickname=None, method=None, con: aiosqlite.Conn
                 await cursor.execute(f"SELECT * FROM {TABLE} WHERE {col} = ?;", (val, ))
                 # aiosqlite поддерживает только метод fetchall, так что мы
                 # получим список из одного элемента - кортежа. Сделаем срез.
-                # print("ДОССС", await cursor.fetchall())
                 info = (await cursor.fetchall())[0]
                 return (
                     # Формируем словарь
