@@ -32,10 +32,6 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 scheduler = AsyncIOScheduler()
 
-def job_function(dp, bot):
-    print("Call me maybe...")
-
-
 async def main() -> None:
 
     # To store states, we use Redis (while development, it's off - uncomment for production)
@@ -68,10 +64,6 @@ async def main() -> None:
     bot = Bot(TG_TOKEN, parse_mode="HTML")
 
     scheduler.add_job(
-        job_function, 'interval', seconds=500,
-        kwargs={"dp": dp, "bot": bot,}
-    )
-    scheduler.add_job(
         update_users_coins, 'interval', seconds=5,
         kwargs={"bot": bot,}
     )
@@ -82,7 +74,8 @@ async def main() -> None:
 
     loop = asyncio.get_event_loop()
     # loop.create_task(behind_loop(bot))
-    loop.create_task(run_web())
+    # loop.create_task(run_web())
+    await run_web()
 
     # And the run events dispatching
     await dp.start_polling(bot, skip_updates=True)

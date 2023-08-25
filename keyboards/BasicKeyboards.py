@@ -179,7 +179,7 @@ help_kb = make_keyboard(
             )],
             [('🔙 Back', '🔙 Назад',  'main')],
             [
-                ("Report the problem", "Сообщить о проблеме", {"web_app": WebAppInfo(url="https://remainedmind.github.io/RobBot/web/feedback_form.html")})
+                ("Report the problem", "Сообщить о проблеме", {"web_app": WebAppInfo(url="https://remainedmind.github.io/RobBot/web/pages/feedback_form.html")})
                 # ("Report the problem", "Сообщить о проблеме", {"web_app": WebAppInfo(url="http://127.0.0.1:8080//feedback_form.html")})
 
             ],
