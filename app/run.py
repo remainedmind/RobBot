@@ -14,6 +14,8 @@ from app.finite_state_machine import UserStates
 
 import os
 
+from web.web_app import run_web
+
 
 
 
@@ -80,7 +82,7 @@ async def main() -> None:
 
     loop = asyncio.get_event_loop()
     # loop.create_task(behind_loop(bot))
-    # loop.create_task()
+    loop.create_task(run_web())
 
     # And the run events dispatching
     await dp.start_polling(bot, skip_updates=True)

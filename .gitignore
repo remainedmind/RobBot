@@ -1,7 +1,7 @@
 secret_data.py
-const.py
+constants/const.py
 voices
-promo.json
+constants/promo.json
 
 archive
 telegram-venv

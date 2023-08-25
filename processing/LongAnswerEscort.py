@@ -4,9 +4,8 @@ from aiogram import exceptions, Bot
 from aiogram.types import Message
 from aiogram.methods.send_chat_action import SendChatAction
 # from aiogram.utils.chat_action import ChatActionSender
-from processing.SQL_processingg.SQL_high_level_processing import check_for_premium
 from text_data.message_answers import answers_texts as ma_texts
-from const import DELAY
+from constants.const import DELAY
 
 answer_delay = {
     'slow': ('🕐🕑🕒🕔🕕🕖🕘🕚🕛', "/-\\|/-\\|/"),

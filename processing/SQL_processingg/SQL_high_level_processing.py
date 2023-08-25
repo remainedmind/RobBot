@@ -12,9 +12,7 @@ aiosqlite сюда нам не трубется
 """
 
 import aiosqlite
-import asyncio
-import sqlite3
-from const import DATABASE, TABLE, DEFAULT_BALANCE, INSTANT_REFERRAL_REWARD, UPDATE_TIME
+from constants.const import INSTANT_REFERRAL_REWARD, UPDATE_TIME
 from datetime import datetime
 from processing.SQL_processingg import SQL_low_level_processing as low_level_sql
 

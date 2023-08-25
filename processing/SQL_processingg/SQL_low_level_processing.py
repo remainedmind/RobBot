@@ -14,7 +14,7 @@ aiosqlite сюда нам не трубется
 import aiosqlite
 import asyncio
 import sqlite3
-from const import DATABASE, TABLE, DEFAULT_BALANCE
+from constants.const import DATABASE, TABLE, DEFAULT_BALANCE
 
 
 

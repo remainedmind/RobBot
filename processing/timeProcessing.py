@@ -1,11 +1,6 @@
 from datetime import datetime, timedelta
 
 
-from const import UPDATE_TIME, INSTANT_REFERRAL_REWARD, PREMIUM_DURATION
-
-
-
-
 async def set_expiry_date(date: datetime, extra_time: dict) -> str:
     """ Transform datetimee to string"""
 

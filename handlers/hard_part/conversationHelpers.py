@@ -1,11 +1,11 @@
 """
 
 """
-import json, pickle
+import pickle
 from typing import Optional, Tuple
-from aiogram import Bot, Router, F, exceptions
+from aiogram import Bot, Router, exceptions
 
-from aiogram.types import Message, CallbackQuery, InputMediaPhoto, InlineKeyboardMarkup
+from aiogram.types import Message, InputMediaPhoto, InlineKeyboardMarkup
 import asyncio
 
 router = Router()  # [1]
@@ -23,7 +23,7 @@ from processing.ServerSideProcessing.voiceTranscription import transcribe
 
 
 
-from const import VOICE_TRANSCRIBE_PRICE, MAX_DIALOGUE_SIZE
+from constants.const import VOICE_TRANSCRIBE_PRICE, MAX_DIALOGUE_SIZE
 
 from aiogram.fsm.context import FSMContext
 

@@ -6,7 +6,7 @@ from secret_data import YX_TOKEN, YX_URL
 
 
 # Загружаем json-словарь для повышения качества перевода
-with open(os.getcwd()+'/glossary.json', encoding='UTF-8') as jsonfile:
+with open('../constants/glossary.json', encoding='UTF-8') as jsonfile:
     glossaryConfig = json.load(jsonfile)
 
 

@@ -1,13 +1,13 @@
-import asyncio
 import datetime
 import aiosqlite
 from aiogram import Bot, exceptions
 from processing.SQL_processingg import SQL_high_level_processing as sql_high_p
-from processing.timeProcessing import calculate_renew_time, set_expiry_date, get_expiry_date
+from processing.timeProcessing import calculate_renew_time, get_expiry_date
 from text_data.message_answers import answers_texts as ma_texts
 from keyboards.BasicKeyboards import subscribe_to_ru_channel_kb
-from const import DATABASE, DEFAULT_BALANCE, REFERRAL_RATIO
-from secret_data import TG_RU_CHANNEL_ID, TG_SUPPORT_ID, TG_ADMIN_ID
+from constants.const import DATABASE, DEFAULT_BALANCE, REFERRAL_RATIO
+from secret_data import TG_RU_CHANNEL_ID, TG_SUPPORT_ID
+
 SLEEP_TIME = 15#
 
 # async def behind_loop(bot: Bot):

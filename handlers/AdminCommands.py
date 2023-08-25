@@ -23,7 +23,7 @@ from processing import timeProcessing as timep
 
 from text_data.various import expiry_format
 from text_data import callback_answers
-from const import DATABASE
+from constants.const import DATABASE
 
 # Добавим фильтр
 router.message.filter(IsAdmin())

@@ -1,7 +1,6 @@
 import aiohttp
 from secret_data import GPT_TOKEN, GPT_IMAGE_URL
-from const import USDtoRUB, PHOTO_GENERATION_PRICE
-from processing.ServerSideProcessing.textTranslation import translate_text
+from constants.const import PHOTO_GENERATION_PRICE
 
 
 async def get_photo(
