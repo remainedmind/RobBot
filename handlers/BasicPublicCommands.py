@@ -112,7 +112,14 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     """
     await state.set_state(UserStates.main)
     lang = (await state.get_data())['language']
-    await message.answer(ma_texts['help'][lang], reply_markup=bkb.cancel_kb[lang])
+    # await message.answer(ma_texts['help'][lang], reply_markup=bkb.cancel_kb[lang])
+    await message.answer(ma_texts['help'][lang], reply_markup=bkb.help_kb[lang])
+
+
+# from aiogram.types import (ReplyKeyboardRemove, ReplyKeyboardMarkup,
+#                            KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton)
+# from aiogram.utils.web_app import safe_parse_webapp_init_data, WebAppInitData
+# from aiogram.types.web_app_info import WebAppInfo
 
 
 @router.message(Command(commands=["dice"]))
@@ -120,6 +127,7 @@ async def dice_command(message: Message) -> None:
     """
        Simple dice. Artificial - yes :)   Intelligence - no :(
        """
+
     emoji = await get_emoji(message.message_id)
     await message.answer_dice(emoji=emoji)
 
@@ -131,6 +139,9 @@ async def account_command_handler(message: Message, state: FSMContext) -> None:
     Command to see information about yourself
     """
     await state.set_state(UserStates.main)
+
+
+
     lang = (await state.get_data())['language']
     await message.answer(text=await get_account_details(
         message.from_user.id, lang

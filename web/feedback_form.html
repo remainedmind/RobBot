@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Form</title>
+</head>
+<body>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<form action="https://formspree.io/f/xoqzzaop" method="POST" target="_blank">
+
+<label for="name">Name:</label>
+<input type="text" id="name" name="name" required>
+
+<label for="email">Email:</label>
+<input type="email" id="email" name="email" required>
+
+<label for="message">Message:</label>
+<textarea id="message" name="message" scrolling="auto" required></textarea>
+
+
+<div class="horizontal_flex">
+<button type="submit">Send</button>
+<button type="reset">Reset</button>
+</div>
+
+</form>
+</body>
+</html>

@@ -1,19 +1,23 @@
-from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.types.callback_game import CallbackGame
-from typing import Union, Tuple, List
+from typing import Union, Tuple, List, Literal
 
+
+from secret_data import TG_RU_CHANNEL_LINK
 
 from aiogram.types import (ReplyKeyboardRemove, ReplyKeyboardMarkup,
                            KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton)
-from secret_data import TG_RU_CHANNEL_LINK
+
+from aiogram.utils.web_app import safe_parse_webapp_init_data, WebAppInitData
+from aiogram.types.web_app_info import WebAppInfo
 
 
 # Клавиатура[строка[кнопка[text & data], ...], ...]
 def get_keyboard(
         # buttons: List[List[Tuple[str, ..., Union[str, int],]]],
         buttons,
-        langs: Tuple[str, ...]) -> dict[str, list | InlineKeyboardMarkup]:
+        langs: Tuple[str, ...] = ('en', ),
+) -> dict[str, list | InlineKeyboardMarkup]:
     """
     Функция для создания клавиатуры
     :param buttons: двумерный массив кортежей из двух элементов:
@@ -30,7 +34,8 @@ def get_keyboard(
         for row in buttons:
             layer_buts = []
             for but in row:
-                layer_buts.append(InlineKeyboardButton(text=but[i], callback_data=but[-1]))
+                b = InlineKeyboardButton(text=but[i], callback_data=but[-1])
+                layer_buts.append(b)
             boards[lang].append(layer_buts)
         boards[lang] = InlineKeyboardMarkup(inline_keyboard = boards[lang])
     del layer_buts
@@ -42,6 +47,7 @@ start_kb = get_keyboard(
         [('Поехали', "Let's start", 'ready')],
     ], langs=('ru', 'en')
 )
+
 
 
 main_page_kb = get_keyboard(
@@ -138,4 +144,44 @@ subscribe_to_ru_channel_kb = InlineKeyboardMarkup(
     inline_keyboard = [
         [InlineKeyboardButton(text="Подписаться на новостной канал", url=TG_RU_CHANNEL_LINK)]
     ]
+)
+
+
+def make_keyboard(buttons, langs: Tuple = ('en', )):
+    boards = {}
+    for i, lang in enumerate(langs):
+        boards[lang] = []
+        for row in buttons:
+            layer_buts = []
+            for but in row:
+                text = but[i]
+                button_data = but[-1]
+                button_arg = {"callback_data": button_data} if isinstance(button_data, str) else button_data
+                b = InlineKeyboardButton(text=text, **button_arg)
+                layer_buts.append(b)
+            boards[lang].append(layer_buts)
+        boards[lang] = InlineKeyboardMarkup(inline_keyboard = boards[lang])
+        return boards
+
+
+help_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="Open App", web_app=WebAppInfo(url="https://remainedmind.github.io/contact.html"))]
+    ]
+)
+
+help_kb = make_keyboard(
+    buttons=(
+        [
+            [(
+                '⁉ Why I have limitations in the form of coins?', '⁉ Зачем ограничения в виде монет?',
+                'restriction_reason'
+            )],
+            [('🔙 Back', '🔙 Назад',  'main')],
+            [
+                ("Report the problem", "Сообщить о проблеме", {"web_app": WebAppInfo(url="https://remainedmind.github.io/contact.html")})
+            ],
+        ]
+    ),
+    langs=['en', 'ru']
 )
