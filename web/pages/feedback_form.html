@@ -152,6 +152,7 @@ input[type=file]::file-selector-button:hover {
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
     let tg = window.Telegram.WebaApp;
+    tg.expand();
     let buy = document.getElementById("send");
     buy.addEventListener("click", () => {
         document.getElementById("main").style.display="block";
