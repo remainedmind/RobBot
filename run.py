@@ -1,3 +1,8 @@
+import os
+# import sys
+# sys.path.append(os.getcwd())
+
+
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
@@ -11,8 +16,6 @@ from handlers.callbacks import BasicQueries, CasinoQueries, SettingsQueries
 from handlers.hard_part import conversationHandlers, conversationCallbacks
 
 from app.finite_state_machine import UserStates
-
-import os
 
 from web.web_app import run_web
 
@@ -35,15 +38,15 @@ scheduler = AsyncIOScheduler()
 async def main() -> None:
 
     # To store states, we use Redis (while development, it's off - uncomment for production)
-    # redistorage = RedisStorage.from_url('redis://localhost:6379/0')
+    redistorage = RedisStorage.from_url('redis://localhost:6379/0')
 
-    # dp = Dispatcher(storage=redistorage)
-    dp = Dispatcher()
+    dp = Dispatcher(storage=redistorage)
+    # dp = Dispatcher()
 
     # When shutdown, we close SQL and Redis connections
     observer = EventObserver()
     observer.register(shutdown_connection)
-    # observer.register(redistorage.close)  # To shutdown
+    observer.register(redistorage.close)  # To shut down
 
     dp.include_routers(
         BotBlockingHandler.router,
