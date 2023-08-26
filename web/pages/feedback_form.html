@@ -18,19 +18,23 @@
         }
 
         body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
             background-color: var(--tg-theme-bg-color);
             color: var(--tg-theme-text-color);
             font-family: 'Montserrat', sans-serif;
             font-weight: 200;
             font-size: 12px;
 
-<!--            display: flex;-->
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
             padding: 10px 10px 10px 10px;
             margin: 10px 10px 10px 10px;
     }
+
 
     header{
         padding: 0;
@@ -44,6 +48,11 @@
         text-transform: uppercase;
         margin-top: 18px;
         margin-bottom: 18px;
+    }
+    p{
+        color: black;
+        align-self: center;
+        text-align: center;
     }
 
     div.form {
@@ -76,7 +85,6 @@ input{
     color: var(--tg-theme-hint-color);
     border-radius: 3px;
     width: 100%;
-    height: 30px;
 
 }
 input:focus{
@@ -86,7 +94,6 @@ input:focus{
     border-radius: 6px;
     border-color: %bd5d5d;
     width: 100%;
-    height: 30px;
 
 }
 textarea {
@@ -100,9 +107,11 @@ textarea:focus {
     border: none;
     background-color: rgba(240, 240, 240, 1);
 }
+
 input[type=file]::file-selector-button {
   margin-right: 20px;
   border: none;
+  border-radius: 3px;
   background: #084cdf;
   padding: 10px 20px;
   border-radius: 10px;
@@ -121,21 +130,19 @@ input[type=file]::file-selector-button:hover {
 
 </head>
 <body>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<h3>You can report a problem or just send a message to admin</h3>
 
-
-<div class="'form">
-<form action="https://formspree.io/f/xoqzzaop" method="POST" target="_blank">
+<h3>Contact us</h3>
+<p>You can report a problem or just send a message to admin</p>
+<div id="main" class="'form">
+<form>
 
 <label for="name">Name:</label>
 <input type="text" id="name" name="name" required>
 
-<label for="id">ID:</label>
-<input type="text" id="id" name="id" required>
+<input type="text" id="id" name="id" placeholder="ID" required>
 
 <label for="message">Message:</label>
-<textarea id="message" name="message" scrolling="auto" required></textarea>
+<textarea id="message" placeholder="IDI SUDA" name="message" scrolling="auto" required></textarea>
 
 <label for="screenshot">Upload the screenshot:</label>
 <input type="file" id="screenshot" name="avatar" accept="image/png, image/jpeg" />
@@ -144,5 +151,20 @@ input[type=file]::file-selector-button:hover {
 <button id="reset" type="reset">Reset</button>
 
 </form></div>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    let tg = window.Telegram.WebaApp;
+    let buy = document.getElementById("send");
+    buy.addEventListener("click", () => {
+        document.getElementById("main").style.display="block";
+        document.getElementById("name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;
+    });
+
+    let reset = document.getElementById("reset");
+     tg.close();
+    });
+
+
+</script>
 </body>
 </html>
