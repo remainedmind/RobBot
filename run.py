@@ -38,15 +38,15 @@ scheduler = AsyncIOScheduler()
 async def main() -> None:
 
     # To store states, we use Redis (while development, it's off - uncomment for production)
-    redistorage = RedisStorage.from_url('redis://localhost:6379/0')
+    # redistorage = RedisStorage.from_url('redis://localhost:6379/0')
 
-    dp = Dispatcher(storage=redistorage)
-    # dp = Dispatcher()
+    # dp = Dispatcher(storage=redistorage)
+    dp = Dispatcher()
 
     # When shutdown, we close SQL and Redis connections
     observer = EventObserver()
     observer.register(shutdown_connection)
-    observer.register(redistorage.close)  # To shut down
+    # observer.register(redistorage.close)  # To shut down
 
     dp.include_routers(
         BotBlockingHandler.router,

@@ -36,7 +36,7 @@ from keyboards import ConversationContextKeyboard as conconkb
 router = Router()
 
 @router.message(CommandStart())
-async def command_start_handler(message: Message, command: CommandObject, state: FSMContext) -> None:
+async def command_start_handler(message: Message, command: CommandObject, state: FSMContext, bot: Bot) -> None:
     """
 
     """
@@ -73,7 +73,7 @@ async def command_start_handler(message: Message, command: CommandObject, state:
                 reward = await sql_high_p.add_referral(ref_id, user_id)
                 if reward:
                     referrer_lang = await sql_high_p.get_lang(ref_id)
-                    print(await SendMessage(chat_id=ref_id, text=ma_texts['referral']['new_referral'][referrer_lang].format(reward)))
+                    await bot(SendMessage(chat_id=ref_id, text=ma_texts['referral']['new_referral'][referrer_lang].format(reward)))
             except (UnicodeDecodeError, ValueError):
                 pass
     await state.update_data(language=lang)

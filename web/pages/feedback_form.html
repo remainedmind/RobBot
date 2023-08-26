@@ -73,8 +73,18 @@ form button:hover {
 input{
     margin: 5px 0;
     border: none;
-    background-color: rgba(240, 240, 240, 1);
+    color: var(--tg-theme-hint-color);
     border-radius: 3px;
+    width: 100%;
+    height: 30px;
+
+}
+input:focus{
+    margin: 5px 0;
+    border: none;
+    background-color: rgba(240, 240, 240, 1);
+    border-radius: 6px;
+    border-color: %bd5d5d;
     width: 100%;
     height: 30px;
 
@@ -86,9 +96,7 @@ textarea {
     width: 100%;
 }
 
-
-
-    </style>
+</style>
 
 
 
@@ -97,10 +105,9 @@ textarea {
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <h3>You can report a problem or just send a message to admin</h3>
 
+
 <div class="'form">
 <form action="https://formspree.io/f/xoqzzaop" method="POST" target="_blank">
-
-
 
 <label for="name">Name:</label>
 <input type="text" id="name" name="name" required>
@@ -113,7 +120,6 @@ textarea {
 
 <label for="screenshot">Upload the screenshot:</label>
 <input type="file" id="screenshot" name="avatar" accept="image/png, image/jpeg" />
-
 
 <button id="send" type="submit">Send</button>
 <button id="reset" type="reset">Reset</button>
