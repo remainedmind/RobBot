@@ -9,6 +9,8 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200:500&display=swap');
         html {
+        background-color: var(--tg-theme-bg-color);
+        color: var(--tg-theme-text-color);
         scroll-behavior: smooth;
         margin: 0;
         padding: 0;
@@ -21,6 +23,13 @@
             font-family: 'Montserrat', sans-serif;
             font-weight: 200;
             font-size: 12px;
+
+<!--            display: flex;-->
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 10px 10px 10px;
+            margin: 10px 10px 10px 10px;
     }
 
     header{
@@ -28,7 +37,7 @@
         margin-bottom: 20px;
     }
 
-    h1{
+    h3{
         color: black;
         align-self: center;
         text-align: center;
@@ -36,6 +45,49 @@
         margin-top: 18px;
         margin-bottom: 18px;
     }
+
+    div.form {
+<!--    display: flex;-->
+<!--    flex-direction: row;-->
+    align-items: center;
+
+    }
+
+
+form button{
+    padding: 2px 2px;
+    margin: 5px;
+    background: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+form button:hover {
+    background: var(--tg-theme-secondary-bg-color);
+    border-radius: 10px;
+}
+
+input{
+    margin: 5px 0;
+    border: none;
+    background-color: rgba(240, 240, 240, 1);
+    border-radius: 3px;
+    width: 100%;
+    height: 30px;
+
+}
+textarea {
+    border: none;
+    background-color: var(--tg-theme-text-color);
+    border-radius: 3px;
+    width: 100%;
+}
+
+
+
     </style>
 
 
@@ -43,7 +95,9 @@
 </head>
 <body>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<h1>You can report a problem or just send a message to admin</h1>
+<h3>You can report a problem or just send a message to admin</h3>
+
+<div class="'form">
 <form action="https://formspree.io/f/xoqzzaop" method="POST" target="_blank">
 
 
@@ -51,7 +105,7 @@
 <label for="name">Name:</label>
 <input type="text" id="name" name="name" required>
 
-<label for="id">Name:</label>
+<label for="id">ID:</label>
 <input type="text" id="id" name="id" required>
 
 <label for="message">Message:</label>
@@ -60,7 +114,7 @@
 <label for="screenshot">Upload the screenshot:</label>
 <input type="file" id="screenshot" name="avatar" accept="image/png, image/jpeg" />
 
-<div>
+
 <button id="send" type="submit">Send</button>
 <button id="reset" type="reset">Reset</button>
 </div>

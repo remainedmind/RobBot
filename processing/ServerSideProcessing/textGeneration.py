@@ -68,7 +68,6 @@ async def ask_gpt(data: list[dict], user_id: int =0, user_status: str = 'user', 
                 if response.status == 200:
                       # Получаем объект dict
                     coins = answer['usage']['total_tokens']
-                    print(coins)
                     return answer['choices'][0]['message']['content'], coins
                 else:  # bad request - вызываем исключение
                     try:

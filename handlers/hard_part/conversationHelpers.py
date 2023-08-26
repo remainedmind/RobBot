@@ -166,7 +166,6 @@ async def process_question(user_id: int, message: Message, bot: Bot, user_info: 
         # Check if there are any links in the message. If yes, we transform it to hypertext
 
         entities = answer_msg.entities
-        # print(entities)
         if entities:
             text = answer_msg.text
             # entities.reverse()

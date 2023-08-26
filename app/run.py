@@ -63,8 +63,16 @@ async def main() -> None:
 
     bot = Bot(TG_TOKEN, parse_mode="HTML")
 
+    # scheduler.add_job(
+    #     update_users_coins, 'interval', hours=3,
+    #     kwargs={"bot": bot,}
+    # )
+
+    # We enable coins updating at every 2 days
     scheduler.add_job(
-        update_users_coins, 'interval', seconds=5,
+        update_users_coins, 'cron',
+        day=2,
+        # second=12,
         kwargs={"bot": bot,}
     )
     scheduler.start()
@@ -75,7 +83,7 @@ async def main() -> None:
     loop = asyncio.get_event_loop()
     # loop.create_task(behind_loop(bot))
     # loop.create_task(run_web())
-    await run_web()
+    # await run_web()
 
     # And the run events dispatching
     await dp.start_polling(bot, skip_updates=True)

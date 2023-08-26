@@ -237,10 +237,10 @@ PURCHASE_STEPS = {
                   'дождитесь её окончания.'
     },
     'waiting_for_receipt': {
-            'en': 'Please make a payment and send a screenshot of '
-                  'transaction (receipt) to this chat.',
-            'ru': 'Пожалуйста, сделайте перевод и отправьте сюда '
-                  'скриншот транзакции (чек).'
+            'en': '<b>Please make a payment and send a screenshot of '
+                  'transaction (receipt) to this chat.</b>',
+            'ru': 'Пожалуйста, сделайте перевод и <b>обязательно отправьте сюда '
+                  'скриншот транзакции (чек).</b>'
     },
     "complete_the_payment": {
         'en': 'Please complete payment by sending the receipt.',

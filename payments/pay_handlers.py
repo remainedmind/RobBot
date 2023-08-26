@@ -303,7 +303,7 @@ async def callbacks_num_change_fab(
 
             success = await sql_high_p.set_new_status(user_id, status, now, period = {'days': int(value)})
             if success:
-                send_result = SendMessage(chat_id=user_id, text=ma_texts['new_status'][status]['en'])
+                send_result = bot(SendMessage(chat_id=user_id, text=ma_texts['new_status'][status]['en']))
                 await callback.message.reply(admin_command_answers['new_status'].format(status))
         if success:
             confirm = await sql_high_p.confirm_payment(
@@ -316,14 +316,12 @@ async def callbacks_num_change_fab(
                 text = None
                 markup = None
         else:
-            await callback.message.reply("AN ERROR OCCURED")
+            await callback.message.reply("AN ERROR OCCURRED")
 
     elif action == 'confirm':
         # This action is for buying with BOTcoins
         value = payment_config.ALL_GOODS[category][subcategory]['value']
         price = await get_price(item, payment_method=subject)
-        print(value, type(value), type(price), subject)
-
         if category == 'sub':
             status = 'premium'
             now = callback.message.date.utcnow()  # UTC TIME
@@ -347,8 +345,8 @@ async def callbacks_num_change_fab(
         await callback.message.edit_reply_markup(reply_markup=markup)
 
 
-@router.message(UserStates.sending_receipt, or_f(F.photo, F.file))
-async def photo_msg(message: Message, state: FSMContext):
+@router.message(UserStates.sending_receipt, or_f(F.photo, F.document))
+async def photo_msg(message: Message, state: FSMContext, bot: Bot):
     user_id = message.from_user.id
     user_info = await state.get_data()
     lang = user_info['language']
@@ -369,10 +367,9 @@ async def photo_msg(message: Message, state: FSMContext):
         'payment_from'
     ].format(**db_info)
 
-    await SendPhoto(chat_id=TG_SUPPORT_ID, photo=message.photo[0].file_id, caption=payment_message,
-                    # parse_mode='MarkdownV2',
+    await bot(SendPhoto(chat_id=TG_SUPPORT_ID, photo=message.photo[0].file_id, caption=payment_message,
                     reply_markup=keyboard)
-
+      )
     # await SendMessage(chat_id=TG_SUPPORT_ID, text=payment_message, parse_mode='MarkdownV2', reply_markup=keyboard)
     await state.set_state(UserStates.main)
     await message.answer(PURCHASE_STEPS['catch_screenshot'][lang])

@@ -16,6 +16,7 @@ async def get_account_details(id, lang) -> str:
     info = await sql_high_p.get_user_info_quickly(id)
 
     expiry = await timep.get_expiry_date(info['expiry'])
+
     info['expiry'] = expiry.strftime(expiry_format['coins_update'][lang])
 
     status = info['status'].upper()

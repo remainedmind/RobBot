@@ -2,7 +2,7 @@
 Модуль с хэндлерами для команд, предназначенных только
 для админа
 """
-from aiogram import Router, F, md, exceptions
+from aiogram import Router, F, md, exceptions, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.filters import Command
@@ -23,7 +23,7 @@ from processing import timeProcessing as timep
 
 from text_data.various import expiry_format
 from text_data import callback_answers
-from constants.const import DATABASE
+from constants.const import DATABASE, DEFAULT_BALANCE
 
 # Добавим фильтр
 router.message.filter(IsAdmin())
@@ -82,6 +82,7 @@ async def confirm_feedback(
         callback: CallbackQuery,
         callback_data: AdminCallbacks,
         state: FSMContext,
+        bot: Bot,
 ):
     user_id = callback_data.user_id
     action = callback_data.action
@@ -99,10 +100,12 @@ async def confirm_feedback(
         if data == "status":
             now = callback.message.date.utcnow()  # UTC TIME
             # By default, we give premium for 30 days
-            success = await sql_high_p.set_new_status(user_id, status, now, period={'days': 30})
+            success = await sql_high_p.set_new_status(user_id, status, now, period={'days': 30,})
             if success:
-                await SendMessage(chat_id=user_id, text=ma_texts['new_status'][status]['en'])
+                await bot(SendMessage(chat_id=user_id, text=ma_texts['new_status'][status]['en']))
                 await callback.message.reply(admin_command_answers['new_status'].format(status))
+
+            await sql_high_p.change_coins_balance(user_id, DEFAULT_BALANCE['premium']['general'], method='put')
     elif action == 'send_spam':
         await callback.message.reply(admin_command_answers['spam_third'],
                                      reply_markup=await build_keyboard(user_id, action=action)
@@ -116,7 +119,7 @@ async def confirm_feedback(
             user_lang = client[6]  # language
             if user_lang == data or data == 'all':  # Audience
                 try:
-                    await SendMessage(chat_id=user_to_sent, text=callback.message.html_text, parse_mode='HTML')
+                    await bot(SendMessage(chat_id=user_to_sent, text=callback.message.html_text, parse_mode='HTML', disable_notification=True))
                 except exceptions.TelegramForbiddenError:
                     await black_list.edit_text(
                         black_list.text + f"\n<code>{user_to_sent}</code>;"
@@ -176,7 +179,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
 
 
 @router.message(F.text, UserStates.coins_giving)
-async def command_start_handler(message: Message, state: FSMContext) -> None:
+async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -> None:
     """
 
     :param message:
@@ -194,7 +197,7 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
         if success:
             if charge > 0:
                 # We notice the user
-                await SendMessage(chat_id=user_id, text=ma_texts['got_coins']['en'].format(charge))
+                await bot(SendMessage(chat_id=user_id, text=ma_texts['got_coins']['en'].format(charge)))
             await message.reply(admin_command_answers['new_balance'].format(charge))
         else:
             await message.reply('Operation failed!')

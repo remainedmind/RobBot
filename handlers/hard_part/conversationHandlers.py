@@ -40,7 +40,7 @@ router.message.filter(invert_f(UserStates.need_to_unblock_bot))
 
 
 
-@router.message(Command(commands=["ask"]), flags={"throttling": 20, 'coins_minimum': 0})
+@router.message(Command(commands=["ask"]), flags={"throttling": 10, 'coins_minimum': 0})
 async def command_start_handler(message: Message, state: FSMContext, command: Command, bot: Bot) -> None:
     user_id = message.from_user.id
     param = command.args
@@ -65,7 +65,7 @@ async def command_start_handler(message: Message, state: FSMContext, command: Co
         await message.reply(ma_texts['answering']['empty command'][lang])
 
 
-@router.message(Command(commands=["image"]), flags={"throttling": 20, 'coins_minimum': 600})
+@router.message(Command(commands=["image"]), flags={"throttling": 10, 'coins_minimum': 600})
 async def draw(message: Message, command: Command, state: FSMContext, bot: Bot) -> None:
     param = command.args
     user_id = message.from_user.id
@@ -79,20 +79,19 @@ async def draw(message: Message, command: Command, state: FSMContext, bot: Bot) 
         await state.set_state(UserStates.image_generation)
         await message.reply(ma_texts['answering']['photo'][lang][0], reply_markup=bkb.cancel_kb[lang])
 
+@router.message(F.text.startswith(words_to_image), F.text.as_("text"),  flags={"throttling": 10, 'coins_minimum': 600})
+async def draw(message: Message, text, state: FSMContext, bot: Bot) -> None:
+    user_id = message.from_user.id
+    user_info = await state.get_data()
+    match = re.search(string_for_re_searching, string=text.lower())
+    # We don't need to check match because we already handled proper message
+    text = text[match.end():]
+    await state.set_state(UserStates.main)
+    coins = await process_drawing(user_id, message, bot, text, user_info)
+    await sql_high_p.change_coins_balance(user_id, coins)
 
-# @router.message(F.text(startswith=words_to_image, ignore_case=True), F.text.as_("text"),  flags={"throttling": 20, 'coins_minimum': 600})
-# async def draw(message: Message, text, state: FSMContext) -> None:
-#     user_id = message.from_user.id
-#     user_info = await state.get_data()
-#     match = re.search(string_for_re_searching, string=text.lower())
-#     # We don't need to check match because we already handled proper message
-#     text = text[match.end():]
-#     await state.set_state(UserStates.main)
-#     coins = await process_drawing(user_id, message, text, user_info)
-#     await sql_high_p.change_coins_balance(user_id, coins)
 
-
-@router.message(UserStates.image_generation, F.text,  flags={"throttling": 20, 'coins_minimum': 600})
+@router.message(UserStates.image_generation, F.text,  flags={"throttling": 10, 'coins_minimum': 600})
 async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -> None:
     """
 
@@ -104,12 +103,11 @@ async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -
     user_info = await state.get_data()
     await state.set_state(UserStates.main)
     coins = await process_drawing(user_id, message, bot, message.text, user_info)
-    print(user_id)
     await sql_high_p.change_coins_balance(user_id, coins)
 
 
 # @router.message(UserStates.main, F.text,  flags={"throttling": 20})
-@router.message(F.text,  flags={"throttling": 20, 'coins_minimum': 0})
+@router.message(F.text,  flags={"throttling": 10, 'coins_minimum': 0})
 async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -> None:
     """
 
@@ -121,7 +119,6 @@ async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -
     user_info = await state.get_data()
     lang = user_info['language']
     await state.set_state(UserStates.main)
-    return await message.answer("Got it, bro.")
 
     dialogue, coins, removed_old = await process_question(user_id, message, bot, user_info)
     if dialogue:
@@ -137,7 +134,7 @@ async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -
     await sql_high_p.change_coins_balance(user_id, coins)
 
 
-@router.message(F.voice,  flags={"throttling": 20, 'coins_minimum': 0})
+@router.message(F.voice,  flags={"throttling": 10, 'coins_minimum': 0})
 async def voice_message_handler(message: Message, bot: Bot, state: FSMContext) -> None:
     """
     Function for handling voice messages for further recognition.

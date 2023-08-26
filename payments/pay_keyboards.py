@@ -1,8 +1,9 @@
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from typing import Union, Tuple, List, Optional
 from aiogram.filters.callback_data import CallbackData
 
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
+from aiogram.types import Message
+from aiogram.types import KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types.web_app_info import WebAppInfo
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.methods.create_invoice_link import CreateInvoiceLink
 from text_data.message_answers import answers_texts as ma_texts
@@ -289,12 +290,33 @@ async def get_cancel_payment_button(item, currency, lang: str='en'):
     builder.adjust(1)
     return builder.as_markup()
 
+tinkoff_button = {
+    'ru':  InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text="↗  Быстрый перевод",
+            web_app=WebAppInfo(url=shop_config.TINKOFF_PAY_URL)
+        )
+        ]
+    ],
+    ),
+    'en': InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text="➡ Fast transfer",
+            web_app=WebAppInfo(url=shop_config.TINKOFF_PAY_URL),
+        )
+        ]
+    ],)
+}
+
+
 
 async def get_tinkoff_buy_button(item, currency, lang: str='en'):
 
-    builder = InlineKeyboardBuilder()
-    buy_text = '↗  Быстрый перевод' if lang == 'ru' else '➡ Fast transfer'
-    builder.button(text=buy_text,  url=shop_config.TINKOFF_PAY_URL, pay=True)
+    builder = InlineKeyboardBuilder().from_markup(tinkoff_button[lang])
+    # builder = builder.from_markup(tinkoff_button[lang])
+
+    # buy_text = '↗  Быстрый перевод' if lang == 'ru' else '➡ Fast transfer'
+    # builder.button(text=buy_text,  url=shop_config.TINKOFF_PAY_URL, pay=True)
     cancel_text = '❌ Прервать оплату ❌' if lang =='ru' else '❌ Abort payment ❌'
     builder.button(text=cancel_text,
                    callback_data=PaymentsCallback(action='show', subject='payment_ways', item=item, currency=currency))
@@ -306,7 +328,7 @@ async def get_tinkoff_buy_button(item, currency, lang: str='en'):
 async def button_for_admin(payload: str, user_id: int) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    builder.button(text="Confirm", callback_data=PaymentsCallback(action='approve', subject=user_id, data=payload))
+    builder.button(text="Confirm", callback_data=PaymentsCallback(action='approve', subject=str(user_id), data=payload))
 
     # builder.button(text=cancel_text, callback_data='market')
     # builder.button(text=cancel_text, callback_data=PaymentsCallback(action='back_to', subject='all_goods'))

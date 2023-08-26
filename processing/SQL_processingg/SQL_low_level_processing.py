@@ -91,7 +91,9 @@ async def open_connection() -> None:
     READ_CONNECTION = await aiosqlite.connect(DATABASE)
     WRITE_CONNECTION = await aiosqlite.connect(DATABASE)
 
+
 asyncio.run(open_connection())
+
 
 async def add_user(values: tuple, con=WRITE_CONNECTION):
     """
@@ -162,8 +164,6 @@ async def get_user_info(id=None, nickname=None, method=None, con: aiosqlite.Conn
             else:
                 col = 'nickname'
                 val = nickname
-            # col = 'id' if id else 'nickname'
-            # val = id or nickname
             try:
                 await cursor.execute(f"SELECT * FROM {TABLE} WHERE {col} = ?;", (val, ))
                 # aiosqlite поддерживает только метод fetchall, так что мы
