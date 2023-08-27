@@ -147,11 +147,11 @@ input[type=file]::file-selector-button:hover {
 <!--<input type="file" id="screenshot" name="avatar" accept="image/png, image/jpeg" />-->
 
 <!--<button id="send" type="submit">Send</button>-->
-<button id="send" onclick="sendData();">Send</button>
-<button id="reset" type="reset">Reset</button>
+<button id="send">Send</button>
+<!--<button id="reset" type="reset">Reset</button>-->
 <button onclick="tg.expand();">Expand</button>
-<button onclick="tg.close();">Close</button>
-<button onclick="tg.toggleMainButton(this);">Hide Main Button</button>
+<!--<button onclick="tg.close();">Close</button>-->
+<!--<button onclick="tg.toggleMainButton(this);">Hide Main Button</button>-->
 
 
 </form></div>
@@ -162,12 +162,21 @@ input[type=file]::file-selector-button:hover {
     let send = document.getElementById("send");
 
 
-    function sendData() {
+<!--    function sendData() {-->
+<!--        let data = {-->
+<!--            name:  document.getElementById("name");,-->
+<!--        };-->
+<!--        tg.sendData(JSON.stringify(data));-->
+<!--    }-->
+
+
+    send.addEventListener("click", () => {
         let data = {
-            name:  document.getElementById("name");,
+            name:  tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;
         };
         tg.sendData(JSON.stringify(data));
     }
+    );
 
     buy.addEventListener("click", () => {
 <!--        document.getElementById("main").style.display="block";-->

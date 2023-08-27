@@ -29,6 +29,7 @@ class AccessCheckMiddleware(BaseMiddleware):
         event: Message | CallbackQuery,
         data: Dict[str, Any],
     ) -> Any:
+        # print("ПОЙМАЛИ ИВЕНТ: \n\n", data)
         try:
             user_id = event.from_user.id
             chat_id = event.chat.id

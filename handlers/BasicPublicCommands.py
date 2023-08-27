@@ -97,46 +97,34 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     """
     lang = (await state.get_data())['language']
     await state.set_state(UserStates.main)
-    await message.answer(ma_texts['main'][lang], reply_markup=bkb.test_kb)
+    answer = await message.answer(ma_texts['main'][lang], reply_markup=bkb.test_kb)
+    print(answer)
 
 
 
-from aiogram.utils.web_app import safe_parse_webapp_init_data
-from aiohttp.web_request import Request
-from aiohttp.web_response import json_response
+# from aiogram.utils.web_app import safe_parse_webapp_init_data
+# from aiohttp.web_request import Request
+# from aiohttp.web_response import json_response
+#
+# async def check_data_handler(request: Request):
+#     print('получили реквест')
+#     bot: Bot = request.app["bot"]
+#
+#     data = await request.post()  # application/x-www-form-urlencoded
+#     try:
+#         data = safe_parse_webapp_init_data(token=bot.token, init_data=data["_auth"])
+#     except ValueError:
+#         return json_response({"ok": False, "err": "Unauthorized"}, status=401)
+#     print(json_response({"ok": True, "data": data.user.model_dump_json()}))
 
-async def check_data_handler(request: Request):
-    print('получили реквест')
-    bot: Bot = request.app["bot"]
 
-    data = await request.post()  # application/x-www-form-urlencoded
-    try:
-        data = safe_parse_webapp_init_data(token=bot.token, init_data=data["_auth"])
-    except ValueError:
-        return json_response({"ok": False, "err": "Unauthorized"}, status=401)
-    print(json_response({"ok": True, "data": data.user.model_dump_json()}))
-
-
-@router.message(WebAppData)
-async def command_start_handler(state: FSMContext, web: WebAppData) -> None:
+@router.message(F.web_app_data)
+async def command_start_handler(message: Message, state: FSMContext, web: WebAppData) -> None:
     """
 
     """
-    print(web)
+    print(web, '\n\n\n', message)
     # await message.answer("GOT", reply_markup=bkb.test_kb)
-
-@router.message()
-async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -> None:
-    """
-    It's an old command. When recieved, user's menu will be changed to new format
-    """
-    lang = (await state.get_data())['language']
-    user_id, chat_id = message.from_user.id, message.chat.id
-
-    await set_personal_menu_commands(
-        chat_id=chat_id, user_id=user_id, lang=lang, bot=bot
-    )
-    await message.answer(ma_texts['switch'][lang])
 
 
 @router.message(Command(commands=["help"]))
