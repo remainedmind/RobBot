@@ -118,13 +118,13 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
 #     print(json_response({"ok": True, "data": data.user.model_dump_json()}))
 
 
-@router.message()
-async def command_start_handler(message: Message) -> None:
-    """
-
-    """
-    print(message.web_app_data)
-    # await message.answer("GOT", reply_markup=bkb.test_kb)
+# @router.message()
+# async def command_start_handler(message: Message) -> None:
+#     """
+#
+#     """
+#     print(message.web_app_data)
+#     # await message.answer("GOT", reply_markup=bkb.test_kb)
 
 
 @router.message(Command(commands=["help"]))

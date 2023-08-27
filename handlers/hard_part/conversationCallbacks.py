@@ -73,7 +73,8 @@ async def callbacks_num_change_fab(
 async def callbacks_num_change_fab(
         callback: CallbackQuery,
         callback_data: conconkb.ConversationCallback,
-        state: FSMContext
+        state: FSMContext,
+        bot: Bot
 ):
     user_id = callback.from_user.id
     user_info = await state.get_data()
@@ -87,7 +88,7 @@ async def callbacks_num_change_fab(
         try:
             question = user_info['voice_text']
             user_info = await state.get_data()
-            dialogue, coins, removed_old = await process_question(user_id=user_id, message=callback.message, user_info=user_info, text=question)
+            dialogue, coins, removed_old = await process_question(user_id=user_id, message=callback.message, bot=bot, user_info=user_info, text=question)
             if dialogue:
                 dialogue = pickle.dumps(dialogue).hex()
                 await state.update_data(dialogue=dialogue)

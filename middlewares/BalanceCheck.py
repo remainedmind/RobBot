@@ -37,7 +37,10 @@ class BalanceCheckMiddleware(BaseMiddleware):
         # Достаём данные из машины состояний
         fsm_data = data['state']
         user_id = event.from_user.id
-        chat_id = event.chat.id
+        try:
+            chat_id = event.chat.id
+        except AttributeError:
+            chat_id = event.message.chat.id
         lang = (await fsm_data.get_data())['language']
 
         # Firstly, update all menu commands to the last version

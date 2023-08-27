@@ -11,7 +11,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
     let tg = window.Telegram.WebaApp;
-<!--    tg.expand();-->
     let send = document.getElementById("send");
 
     toggleMainButton(el) {
@@ -42,27 +41,9 @@
     }
     );
 
-    buy.addEventListener("click", () => {
-<!--        document.getElementById("main").style.display="block";-->
-<!--        document.getElementById("name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;-->
-        let name = document.getElementById("name");
-        let data = {
-        name: name,
-<!--        id: id,-->
-        }
-        tg.sendData(JSON.stringify(data));
-
-
-    });
-
-<!--    let reset = document.getElementById("reset");-->
-<!--    reset.addEventListener("click", () => {-->
-<!--     tg.close();-->
-<!--    });-->
-
 
 </script>
-    <style>
+<style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200:500&display=swap');
         html {
         background-color: var(--tg-theme-bg-color);
