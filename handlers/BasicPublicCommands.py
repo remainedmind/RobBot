@@ -7,7 +7,7 @@ from datetime import datetime
 import aiogram.exceptions
 from aiogram import Router, F, md, html, Bot
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, WebAppData, web_app_info, sent_web_app_message
 from aiogram.filters import CommandStart, Command, Filter, CommandObject, invert_f, or_f, and_f
 from aiogram.utils.deep_linking import decode_payload
 from aiogram.methods.send_message import SendMessage
@@ -101,7 +101,31 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
 
 
 
-@router.message(Command(commands=["switch"]))
+from aiogram.utils.web_app import safe_parse_webapp_init_data
+from aiohttp.web_request import Request
+from aiohttp.web_response import json_response
+
+async def check_data_handler(request: Request):
+    print('получили реквест')
+    bot: Bot = request.app["bot"]
+
+    data = await request.post()  # application/x-www-form-urlencoded
+    try:
+        data = safe_parse_webapp_init_data(token=bot.token, init_data=data["_auth"])
+    except ValueError:
+        return json_response({"ok": False, "err": "Unauthorized"}, status=401)
+    print(json_response({"ok": True, "data": data.user.model_dump_json()}))
+
+
+@router.message(WebAppData)
+async def command_start_handler(state: FSMContext, web: WebAppData) -> None:
+    """
+
+    """
+    print(web)
+    # await message.answer("GOT", reply_markup=bkb.test_kb)
+
+@router.message()
 async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -> None:
     """
     It's an old command. When recieved, user's menu will be changed to new format

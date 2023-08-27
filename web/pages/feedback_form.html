@@ -134,20 +134,20 @@ input[type=file]::file-selector-button:hover {
 <h3>Contact us</h3>
 <p>You can report a problem or just send a message to admin</p>
 <div id="main" class="'form">
+
 <form>
 
 <label for="name">Name:</label>
 <input type="text" id="name" name="name" placeholder="Аноним" required>
 
-<input type="text" id="id" name="id" placeholder="ID" required>
+<!--<input type="text" id="id" name="id" placeholder="ID" required>-->
+<!--<label for="message">Message:</label>-->
+<!--<textarea id="message" placeholder="IDI SUDA" name="message" scrolling="auto" required></textarea>-->
+<!--<label for="screenshot">Upload the screenshot:</label>-->
+<!--<input type="file" id="screenshot" name="avatar" accept="image/png, image/jpeg" />-->
 
-<label for="message">Message:</label>
-<textarea id="message" placeholder="IDI SUDA" name="message" scrolling="auto" required></textarea>
-
-<label for="screenshot">Upload the screenshot:</label>
-<input type="file" id="screenshot" name="avatar" accept="image/png, image/jpeg" />
-
-<button id="send" type="submit">Send</button>
+<!--<button id="send" type="submit">Send</button>-->
+<button id="send" onclick="sendData();">Send</button>
 <button id="reset" type="reset">Reset</button>
 <button onclick="tg.expand();">Expand</button>
 <button onclick="tg.close();">Close</button>
@@ -159,11 +159,20 @@ input[type=file]::file-selector-button:hover {
 <script>
     let tg = window.Telegram.WebaApp;
 <!--    tg.expand();-->
-    let buy = document.getElementById("send");
+    let send = document.getElementById("send");
+
+
+    function sendData() {
+        let data = {
+            name:  document.getElementById("name");,
+        };
+        tg.sendData(JSON.stringify(data));
+    }
+
     buy.addEventListener("click", () => {
-        document.getElementById("main").style.display="block";
-        document.getElementById("name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;
-        let name = document.getElementById("name")
+<!--        document.getElementById("main").style.display="block";-->
+<!--        document.getElementById("name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;-->
+        let name = document.getElementById("name");
         let data = {
         name: name,
 <!--        id: id,-->
