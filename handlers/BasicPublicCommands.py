@@ -123,7 +123,7 @@ async def command_start_handler(message: Message, state: FSMContext, web: WebApp
     """
 
     """
-    print(web, '\n\n\n', message)
+    print(web, '\n\n\n', message.web_app_data)
     # await message.answer("GOT", reply_markup=bkb.test_kb)
 
 
