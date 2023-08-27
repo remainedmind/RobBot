@@ -137,7 +137,7 @@ input[type=file]::file-selector-button:hover {
 <form>
 
 <label for="name">Name:</label>
-<input type="text" id="name" name="name" required>
+<input type="text" id="name" name="name" placeholder="Аноним" required>
 
 <input type="text" id="id" name="id" placeholder="ID" required>
 
@@ -151,6 +151,7 @@ input[type=file]::file-selector-button:hover {
 <button id="reset" type="reset">Reset</button>
 <button onclick="tg.expand();">Expand</button>
 <button onclick="tg.close();">Close</button>
+<button onclick="tg.toggleMainButton(this);">Hide Main Button</button>
 
 
 </form></div>
@@ -162,6 +163,14 @@ input[type=file]::file-selector-button:hover {
     buy.addEventListener("click", () => {
         document.getElementById("main").style.display="block";
         document.getElementById("name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;
+        let name = document.getElementById("name")
+        let data = {
+        name: name,
+<!--        id: id,-->
+        }
+        tg.sendData(JSON.stringify(data));
+
+
     });
 
 <!--    let reset = document.getElementById("reset");-->
