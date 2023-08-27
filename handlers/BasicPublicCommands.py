@@ -97,8 +97,8 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     """
     lang = (await state.get_data())['language']
     await state.set_state(UserStates.main)
-    answer = await message.answer(ma_texts['main'][lang], reply_markup=bkb.test_kb)
-    print(answer)
+    await message.answer(ma_texts['main'][lang], reply_markup=bkb.test_kb)
+    # print(answer)
 
 
 
@@ -118,12 +118,12 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
 #     print(json_response({"ok": True, "data": data.user.model_dump_json()}))
 
 
-@router.message(F.web_app_data)
-async def command_start_handler(message: Message, state: FSMContext, web: WebAppData) -> None:
+@router.message()
+async def command_start_handler(message: Message) -> None:
     """
 
     """
-    print(web, '\n\n\n', message.web_app_data)
+    print(message.web_app_data)
     # await message.answer("GOT", reply_markup=bkb.test_kb)
 
 

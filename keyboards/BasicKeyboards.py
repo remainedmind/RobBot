@@ -172,6 +172,13 @@ test_kb = InlineKeyboardMarkup(
 
     ]
 )
+but = KeyboardButton(text="Feedback",
+                     web_app=WebAppInfo(url="https://remainedmind.github.io/RobBot/web/pages/feedback_form.html")
+                     )
+test_kb = ReplyKeyboardMarkup(keyboard=[
+    [but]
+])
+# test_kb.add(KeyboardButton(text="Feedback", web_app=WebAppInfo(url="https://remainedmind.github.io/RobBot/web/pages/feedback_form.html")))
 
 help_kb = make_keyboard(
     buttons=(
