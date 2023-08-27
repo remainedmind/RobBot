@@ -110,7 +110,6 @@ async def send_invoice(
         bot: Bot
 ):
     lang = (await state.get_data())['language']
-    print("вот тут")
     await callback.answer(callback_answers.restriction_reason_in_help[lang], show_alert=True)
 
 @router.callback_query(FeedbackCallback.filter())

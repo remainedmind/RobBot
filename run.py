@@ -85,7 +85,7 @@ async def main() -> None:
 
     loop = asyncio.get_event_loop()
     # loop.create_task(behind_loop(bot))
-    # loop.create_task(run_web())
+    loop.create_task(run_web())
     # await run_web()
 
     # And the run events dispatching

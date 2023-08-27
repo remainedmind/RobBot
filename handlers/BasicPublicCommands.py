@@ -90,6 +90,16 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
     await message.answer(ma_texts['main'][lang], reply_markup=bkb.main_page_kb[lang])
 
 
+@router.message(Command(commands=["test"]))
+async def command_start_handler(message: Message, state: FSMContext) -> None:
+    """
+
+    """
+    lang = (await state.get_data())['language']
+    await state.set_state(UserStates.main)
+    await message.answer(ma_texts['main'][lang], reply_markup=bkb.test_kb)
+
+
 
 @router.message(Command(commands=["switch"]))
 async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -> None:

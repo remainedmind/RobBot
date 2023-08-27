@@ -164,9 +164,12 @@ def make_keyboard(buttons, langs: Tuple = ('en', )):
         return boards
 
 
-help_kb = InlineKeyboardMarkup(
+test_kb = InlineKeyboardMarkup(
     inline_keyboard=[
-        [InlineKeyboardButton(text="Open App", web_app=WebAppInfo(url="https://remainedmind.github.io/contact.html"))]
+        [InlineKeyboardButton(text="Feedback", web_app=WebAppInfo(url="https://remainedmind.github.io/RobBot/web/pages/feedback_form.html"))],
+        [InlineKeyboardButton(text="Example", web_app=WebAppInfo(
+            url="https://remainedmind.github.io/RobBot/web/pages/example.html"))]
+
     ]
 )
 
@@ -178,9 +181,9 @@ help_kb = make_keyboard(
                 'restriction_reason'
             )],
             [('🔙 Back', '🔙 Назад',  'main')],
-            # [
-            #     ("Report the problem", "Сообщить о проблеме", {"web_app": WebAppInfo(url="https://remainedmind.github.io/RobBot/web/pages/feedback_form.html")})
-            # ],
+            [
+                ("Report the problem", "Сообщить о проблеме", {"web_app": WebAppInfo(url="https://remainedmind.github.io/RobBot/web/pages/feedback_form.html")})
+            ],
         ]
     ),
     langs=['en', 'ru']

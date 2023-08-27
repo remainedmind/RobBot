@@ -4,12 +4,14 @@ from fastapi.templating import Jinja2Templates
 import uvicorn
 
 app = FastAPI()
-templates = Jinja2Templates(directory=os.getcwd() + "\\..\\web\\pages\\")
+templates = Jinja2Templates(directory=os.getcwd() + "\\web\\pages\\")
 
 
 @app.get("/")
 async def index(request: Request):
-    return templates.TemplateResponse("feedback_form.html", {"request": request})
+    return templates.TemplateResponse("example.html", {"request": request})
+
+    # return templates.TemplateResponse("feedback_form.html", {"request": request})
 
 
 async def run_web():
