@@ -172,13 +172,22 @@ test_kb = InlineKeyboardMarkup(
 
     ]
 )
+but0 = KeyboardButton(text="Example",
+                     web_app=WebAppInfo(url="https://remainedmind.github.io/RobBot/web/pages/example.html")
+                     )
 but = KeyboardButton(text="Feedback",
                      web_app=WebAppInfo(url="https://remainedmind.github.io/RobBot/web/pages/feedback_form.html")
                      )
 test_kb = ReplyKeyboardMarkup(keyboard=[
-    [but]
-])
+    [but],
+    [but0],
+], resize_keyboard=True)
 # test_kb.add(KeyboardButton(text="Feedback", web_app=WebAppInfo(url="https://remainedmind.github.io/RobBot/web/pages/feedback_form.html")))
+
+
+remove_kb = ReplyKeyboardRemove()
+
+
 
 help_kb = make_keyboard(
     buttons=(

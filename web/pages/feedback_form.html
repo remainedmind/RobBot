@@ -169,8 +169,8 @@ input[type=file]::file-selector-button:hover {
 <script>
     let tg = window.Telegram.WebaApp;
     let send = document.getElementById("send");
-    var MainButton = WebApp.MainButton;
-    var BackButton = WebApp.BackButton;
+    let MainButton = WebApp.MainButton;
+    let BackButton = WebApp.BackButton;
 
     MainButton.show();
     BackButton.show();
@@ -186,6 +186,7 @@ input[type=file]::file-selector-button:hover {
       WebApp.showAlert("Нет пути назад!");
       BackButton.hide();
     });
+    function
 
     send.addEventListener("click", () => {
         let data = {

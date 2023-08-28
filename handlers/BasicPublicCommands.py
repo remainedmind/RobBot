@@ -118,13 +118,18 @@ async def command_start_handler(message: Message, state: FSMContext) -> None:
 #     print(json_response({"ok": True, "data": data.user.model_dump_json()}))
 
 
-# @router.message()
-# async def command_start_handler(message: Message) -> None:
-#     """
-#
-#     """
-#     print(message.web_app_data)
-#     # await message.answer("GOT", reply_markup=bkb.test_kb)
+from aiogram.types import ReplyKeyboardRemove
+
+@router.message(
+    F.web_app_data,
+    # F.button_text == 'Example'  # Text of reply button
+)
+async def data_from_WebApp_handler(message: Message) -> None:
+    """
+    Function to handle data sent from WebApp launched via REPLY KEYBOARD.
+    """
+    data = message.web_app_data.data
+    await message.answer("You sent me following: {}".format(data), reply_markup=bkb.remove_kb)
 
 
 @router.message(Command(commands=["help"]))
