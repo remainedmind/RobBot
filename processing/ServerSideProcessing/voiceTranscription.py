@@ -26,15 +26,15 @@ async def transcribe(file_path, file_id, bot: Bot, lang: str | None=None) -> dic
     url = GPT_WHISPER_URL
 
     # # Write the stuff
-    # with open(os.getcwd()+f"/voices/{file_id}.ogg", "wb") as f:
-    #     f.write(file.read())
-    #
-    # # Теперь нужно изменить формат
-    # sound = AudioSegment.from_ogg(os.getcwd()+f"/voices/{file_id}.ogg")
-    #
-    # file = f"voices/{file_id}.mp3"
-    # sound.export(file, format="mp3")
-    file = "voices/Success_Announcement.mp3"  # Any mp3 sound
+    with open(os.getcwd()+f"/voices/{file_id}.ogg", "wb") as f:
+        f.write(file.read())
+
+    # Теперь нужно изменить формат
+    sound = AudioSegment.from_ogg(os.getcwd()+f"/voices/{file_id}.ogg")
+
+    file = f"voices/{file_id}.mp3"
+    sound.export(file, format="mp3")
+    # file = "voices/Success_Announcement.mp3"  # Any mp3 sound
 
     # headers = {
     #     "Authorization": "Bearer {0}".format(GPT_TOKEN),
