@@ -1,8 +1,12 @@
 
 
 import aiohttp
-from secret_data import GPT_TOKEN, GPT_TEXT_URL
+import openai
+from openai import AsyncOpenAI
 
+
+from secret_data import GPT_TOKEN, GPT_TEXT_URL
+client = AsyncOpenAI(api_key=GPT_TOKEN)
 MODEL_INSTRUCTION = {
     'en': """
 You are an robot Rob, made from titanium alloy and based on AI. You 
@@ -32,6 +36,13 @@ async def ask_gpt(data: list[dict], user_id: int =0, user_status: str = 'user', 
         :param temperature: "креативность" бота
         :return: результат запроса и расход в токенах (кортеж)
     """
+    completion = await client.chat.completions.create(model="gpt-3.5-turbo",
+                                                      messages=[
+            {"role": "system",
+             "content": MODEL_INSTRUCTION[lang]},
+            *data,
+        ])
+    return completion.choices[0].message.content, completion.usage.completion_tokens
     url = GPT_TEXT_URL
 
     body = {
