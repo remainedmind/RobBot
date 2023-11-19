@@ -1,7 +1,6 @@
 
 
 import aiohttp
-import openai
 from openai import AsyncOpenAI
 
 

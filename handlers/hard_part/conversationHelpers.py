@@ -263,22 +263,20 @@ async def process_voice(user_id: int, message: Message, state: FSMContext, bot: 
     file_path = file.file_path
     # file = await bot.download_file(file_path)
 
-    response, ans_message = await asyncio.gather(
+    text, ans_message = await asyncio.gather(
         transcribe(file_path, file_id, bot, lang),
         # transcribe(file, file_id, lang),
         escort(user_status=user_status, message=message,  bot=bot, lang=lang, target='voice')
     )
 
     markup = None
-    if response:
-        text = response['text']
-        if text:  # Not None
-            # Запоминаем текст
-            await state.update_data(voice_text=text)
-            answer = ma_texts['answering']['voice'][lang][3].format(text)
-            markup = conconkb.voice_kb[lang]
-        else:  # not None but EMPTY
-            answer = ma_texts['answering']['empty_voice'][lang]
+    if text:
+        # Запоминаем текст
+        await state.update_data(voice_text=text)
+        answer = ma_texts['answering']['voice'][lang][3].format(text)
+        markup = conconkb.voice_kb[lang]
+        # else:  # not None but EMPTY
+        #     answer = ma_texts['answering']['empty_voice'][lang]
     else:
         answer = ma_texts['answering']['unknown_voice_error'][lang]
 
