@@ -3,7 +3,7 @@
 """
 import pickle
 from typing import Optional, Tuple
-from aiogram import Bot, Router, exceptions
+from aiogram import Bot, Router, exceptions, html, md
 
 from aiogram.types import Message, InputMediaPhoto, InlineKeyboardMarkup
 import asyncio
@@ -48,17 +48,28 @@ async def send_answer(answer_message: Message, answer: str, button: InlineKeyboa
     """
     if len(answer) < 4000:
         try:
+
             mkdown_answer = answer
             # Подготовим текст для MarkdownV2
-            [mkdown_answer := mkdown_answer.replace(c, "\\" + c) for c in '.!-+=|<>#']
+            # [mkdown_answer := mkdown_answer.replace(c, "\\" + c) for c in '.!-+=|<>#']
+            mkdown_answer = mkdown_answer.replace('#', "")
+            for c in ['[', ']', '(', ')', '~', '>', '+', '-', '=', '|', '{', '}', '.', '!']:
+                mkdown_answer = mkdown_answer.replace(c, "\\" + c)
+            # answer_msg = await answer_message.edit_text(
+            #     # mkdown_answer,
+            #     answer,
+            #     parse_mode="MarkdownV2",
+            #     reply_markup=button
+            # )
             answer_msg = await answer_message.edit_text(
                 mkdown_answer,
+                # md.quote(mkdown_answer),
                 parse_mode="MarkdownV2",
                 reply_markup=button
             )
 
             # await mAA.answer("HELLO", entities=[Entity])
-        except exceptions.TelegramBadRequest:
+        except exceptions.TelegramBadRequest as TgEx:
             answer_msg = await answer_message.edit_text(
                 answer,
                 parse_mode=None,
@@ -67,11 +78,26 @@ async def send_answer(answer_message: Message, answer: str, button: InlineKeyboa
         return answer_msg
     else:  # Text is too long
         texts = await safe_split_text(answer)
-        message = await answer_message.edit_text(texts[0])
+        try:
+            message = await answer_message.edit_text(texts[0], parse_mode="MarkDownV2")
+        except exceptions.TelegramBadRequest:
+            try:
+                message = await answer_message.edit_text(html.quote(texts[0]), parse_mode="HTML")
+            except exceptions.TelegramBadRequest:
+                message = await answer_message.edit_text(html.quote(texts[0]), parse_mode=None)
         for text in texts[1:-1]:
             # Each message will be an answer for previous.
-            message = await message.reply(text)
-        await message.reply(text=texts[-1], reply_markup=button)
+            try:
+                message = await message.reply(text, parse_mode="MarkDownV2")
+            except exceptions.TelegramBadRequest:
+                try:
+                    message = await message.reply(html.quote(text), parse_mode="HTML")
+                except exceptions.TelegramBadRequest:
+                    message = await message.reply(text, parse_mode=None)
+        try:
+            await message.reply(text=html.quote(texts[-1]), parse_mode="HTML",  reply_markup=button)
+        except exceptions.TelegramBadRequest:
+            await message.reply(text=texts[-1], reply_markup=button)
 
 
 async def process_question(user_id: int, message: Message, bot: Bot, user_info: dict, text: Optional[str] = None) -> Tuple[str, int, str]:
@@ -166,7 +192,7 @@ async def process_question(user_id: int, message: Message, bot: Bot, user_info: 
         # Check if there are any links in the message. If yes, we transform it to hypertext
 
         entities = answer_msg.entities
-        if entities:
+        if entities and False:  # PLACEHOLDER TO SKIP THAT PART
             text = answer_msg.text
             # entities.reverse()
             total_offset = 0

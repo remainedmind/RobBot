@@ -80,102 +80,102 @@ async def translate_text(text=None, tr_from=None, tr_to=None, ):
             return ''
     except ValueError:
         return ''
-
-
-async def ask_gpt(data, id=1, max_tokens=1000, n=1,
-                  temperature=0.5, lang='en'):
-    """
-        Функция для отправки запроса в open.ai
-        :param data: текст запроса
-        :param id: id пользователя
-        Ниже - параметры кастомизации, доступной PRO-users
-        :param max_tokens:
-        :param n: количество альтернативных вариантов ответа
-        :param temperature: "креативность" бота
-        :return: результат запроса и расход в токенах (кортеж)
-    """
-    url = GPT_TEXT_URL
-
-    body = {
-        "model": "gpt-3.5-turbo",
-
-        "messages": [
-            {"role": "system",
-             "content": model_instruction[lang]},
-            *data,
-        ],
-
-        "max_tokens": max_tokens,
-        "temperature": temperature,
-        "user": str(id),
-        "n": n,
-        "stream": False,
-        "stop": None,
-        # "stop": 'stop',
-        "presence_penalty": 0,
-
-    }
-
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer {0}".format(GPT_TOKEN)  # Обращение к GPT через API-ключ
-    }
-
-    # Отправка асинхронных http-запросов
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, headers=headers, json=body) as response:
-                answer = await response.json()
-                if response.status == 200:
-                      # Получаем объект dict
-                    coins = answer['usage']['total_tokens']
-                    return answer['choices'][0]['message']['content'], coins
-                else:  # bad request - вызываем исключение
-                    raise Exception
-    except Exception as e:
-        print(e)
-        return '', 0
+#
+#
+# async def ask_gpt(data, id=1, max_tokens=1000, n=1,
+#                   temperature=0.5, lang='en'):
+#     """
+#         Функция для отправки запроса в open.ai
+#         :param data: текст запроса
+#         :param id: id пользователя
+#         Ниже - параметры кастомизации, доступной PRO-users
+#         :param max_tokens:
+#         :param n: количество альтернативных вариантов ответа
+#         :param temperature: "креативность" бота
+#         :return: результат запроса и расход в токенах (кортеж)
+#     """
+#     url = GPT_TEXT_URL
+#
+#     body = {
+#         "model": "gpt-3.5-turbo",
+#
+#         "messages": [
+#             {"role": "system",
+#              "content": model_instruction[lang]},
+#             *data,
+#         ],
+#
+#         "max_tokens": max_tokens,
+#         "temperature": temperature,
+#         "user": str(id),
+#         "n": n,
+#         "stream": False,
+#         "stop": None,
+#         # "stop": 'stop',
+#         "presence_penalty": 0,
+#
+#     }
+#
+#     headers = {
+#         "Content-Type": "application/json",
+#         "Authorization": "Bearer {0}".format(GPT_TOKEN)  # Обращение к GPT через API-ключ
+#     }
+#
+#     # Отправка асинхронных http-запросов
+#     try:
+#         async with aiohttp.ClientSession() as session:
+#             async with session.post(url, headers=headers, json=body) as response:
+#                 answer = await response.json()
+#                 if response.status == 200:
+#                       # Получаем объект dict
+#                     coins = answer['usage']['total_tokens']
+#                     return answer['choices'][0]['message']['content'], coins
+#                 else:  # bad request - вызываем исключение
+#                     raise Exception
+#     except Exception as e:
+#         print(e)
+#         return '', 0
 
 
 async def translate_to_english(data):
     return await translate_text(text=data, tr_from='ru', tr_to='en')
 
-
-async def get_text(data, return_english=False,
-                   max_tokens=1000, n=1, temperature=1,):
-    """
-    Function for generation of response;
-    - if language is Russian, we translate via Yandex;
-    - otherwise GPT translates itself (sorry :)
-    :param id: unique ID - string
-    :param temperature: creativity of GPT
-    :return:
-    """
-    # price = 0
-    coins = 0
-    if return_english:  # then translate 2 English
-        # Прибавляем количество токенов, затраченное для перевода
-        coins += len(data)
-        # price  += len(data)/1000* 4.92/USDtoRUB  # В долларах
-        data[-1]['content'] = await translate_text(text=data[-1]['content'], tr_from='ru')
-
-
-    answer, tokens = await ask_gpt(data=data, id=id,
-                                     max_tokens=max_tokens, n=n,
-                                     temperature=temperature
-    )
-
-    # price  += tokens * 0.02 / 1000
-
-    # Если GPT вернул ошибку, не списываем токены
-    if tokens:
-        coins += tokens
-    else:
-        coins = 0
-
-    print("REAL TOKENS:   ", coins)
-
-    return answer, coins
+#
+# async def get_text(data, return_english=False,
+#                    max_tokens=1000, n=1, temperature=1,):
+#     """
+#     Function for generation of response;
+#     - if language is Russian, we translate via Yandex;
+#     - otherwise GPT translates itself (sorry :)
+#     :param id: unique ID - string
+#     :param temperature: creativity of GPT
+#     :return:
+#     """
+#     # price = 0
+#     coins = 0
+#     if return_english:  # then translate 2 English
+#         # Прибавляем количество токенов, затраченное для перевода
+#         coins += len(data)
+#         # price  += len(data)/1000* 4.92/USDtoRUB  # В долларах
+#         data[-1]['content'] = await translate_text(text=data[-1]['content'], tr_from='ru')
+#
+#
+#     answer, tokens = await ask_gpt(data=data, id=id,
+#                                      max_tokens=max_tokens, n=n,
+#                                      temperature=temperature
+#     )
+#
+#     # price  += tokens * 0.02 / 1000
+#
+#     # Если GPT вернул ошибку, не списываем токены
+#     if tokens:
+#         coins += tokens
+#     else:
+#         coins = 0
+#
+#     print("REAL TOKENS:   ", coins)
+#
+#     return answer, coins
 
 
 

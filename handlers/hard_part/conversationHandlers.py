@@ -64,7 +64,6 @@ async def command_start_handler(message: Message, state: FSMContext, command: Co
         lang = user_info['language']
         await message.reply(ma_texts['answering']['empty command'][lang])
 
-
 @router.message(Command(commands=["image"]), flags={"throttling": 10, 'coins_minimum': 600})
 async def draw(message: Message, command: Command, state: FSMContext, bot: Bot) -> None:
     param = command.args
@@ -130,7 +129,7 @@ async def command_start_handler(message: Message, state: FSMContext, bot: Bot) -
         if markup:
             markup = markup[lang]
 
-        await message.answer(ma_texts['answering']['dialogue_limit'][lang], reply_markup=markup)
+        await message.answer(ma_texts['answering']['dialogue_limit'][lang], reply_markup=markup, parse_mode="MarkdownV2")
     await sql_high_p.change_coins_balance(user_id, coins)
 
 
